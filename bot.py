@@ -1,6 +1,7 @@
 import discord
 from discord import app_commands
 from discord.ext import commands, tasks
+from dotenv import load_dotenv
 import aiohttp
 import asyncio
 import requests
@@ -12,6 +13,8 @@ intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
+
+load_dotenv()
 
 VER = "beta 0.0.9"
 EEW_WS_URL = 'wss://ws-api.wolfx.jp/jma_eew'
