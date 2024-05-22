@@ -44,3 +44,9 @@ pip install -r requirements.txt
 
 python bot.py
 ```
+
+## 謝礼
+
+### 地震情報API P2PQuake JSON API v2
+
+### 緊急地震API wolfx API
