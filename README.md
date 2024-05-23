@@ -45,6 +45,9 @@ pip install -r requirements.txt
 python bot.py
 ```
 
+## 注意
+このリポジトリを使用する際に発生した損害については、__私は責任を負いません。__十分注意してご利用ください。
+
 ## 謝礼
 
 ### 地震情報API > P2PQuake JSON API v2
