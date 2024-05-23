@@ -120,9 +120,6 @@ async def fetch_earthquake_info():
                             embed.add_field(name="深さ", value=depth, inline=True)
                             embed.set_footer(text=f"{client.user.name}・{source} | Version {VER}", icon_url=f"{client.user.avatar}")
 
-                            file = discord.File(image, filename=image)
-                            embed.set_thumbnail(url=f"attachment://{image}")
-
                             channel = client.get_channel(channel_id)
                             await channel.send(embed=embed, file=file)
 
