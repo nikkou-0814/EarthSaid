@@ -45,6 +45,45 @@ pip install -r requirements.txt
 python bot.py
 ```
 
+## ```testdata.json```の方法(wolfx APIの仕様に基づく)
+### このリポジトリを改造、改良する方向け
+
+| **項目**                 | **説明**                           | **コード内で使用しているか** |
+|-------------------------|------------------------------------|------------------------|
+| **type**                | JMA_EEW                            | NO                     |
+| **title**               | 緊急地震速報                         | NO                     |
+| **codeType**            | 緊急地震速報の説明                    | NO                     |
+| **issueSource**         | 発表機関                            | NO                     |
+| **issueStatus**         | 発表の状態                          | NO                     |
+| **eventID**             | イベントID                          | NO                     |
+| **serial**              | 発表回数                            | YES                    |
+| **announcedTime**       | 発表時間                            | YES                    |
+| **originTime**          | 地震発生時間                         | YES                    |
+| **hypocenter**          | 震源地                              | YES                    |
+| **latitude**            | 震源地の緯度                         | NO                     |
+| **longitude**           | 震源地の経度                         | NO                     |
+| **magnitude**           | マグニチュード                       | YES                    |
+| **depth**               | 震源の深さ                          | YES                    |
+| **maxIntensity**        | 最大震度                             | YES                   |
+| **accuracyEpicenter**   | 震央の精度に関する説明               | NO                      |
+| **accuracyDepth**       | 震源の深さの精度に関する説明         | NO                       |
+| **accuracyMagnitude**   | マグニチュードの精度に関する説明     | NO                        |
+| **maxIntChangeString**  | 最大震度の変更に関する説明           | NO                       |
+| **maxIntChangeReason**  | 最大震度の変更理由                   | NO                     |
+| **warnAreaChiiki**      | 警報が出される地域                   | YES                    |
+| **warnAreaShindo1**     | 地域の最大震度                       | NO                     |
+| **warnAreaShindo2**     | 地域の最小震度                       | NO                     |
+| **warnAreaTime**        | 警報が出された時間                   | NO                     |
+| **warnAreaType**        | 警報の種類（「予報」または「警報」） | YES                       |
+| **warnAreaArrive**      | 地震波が到達したかどうか             | NO                      |
+| **isSea**               | 海域で発生した地震かどうか           | NO                      |
+| **isTraining**          | 訓練用の速報かどうか                 | NO                     |
+| **isAssumption**        | 推定震源（PLUM法、レベル法、IPF法）かどうか | YES                |
+| **isWarn**              | 警報かどうか                         | YES                   |
+| **isFinal**             | 最終報かどうか                       | YES                   |
+| **isCancel**            | 取消報かどうか                       | YES                   |
+| **originalText**        | 気象庁からの原文                     | NO                    |
+
 ## 注意
 このリポジトリを使用する際に発生した<ins>損害については、私は責任を負いません</ins>。十分に注意してご利用ください。
 
