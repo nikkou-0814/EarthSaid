@@ -41,11 +41,12 @@ Discord BOT のトークンとチャンネルIDを記載します。
 
 ```bash
 pip install -r requirements.txt
-
+```
+```bash
 python bot.py
 ```
 
-## ```testdata.json```の方法(wolfx APIの仕様に基づく)
+## ```testdata.json```の記述(wolfx APIの仕様に基づく)
 ### このリポジトリを改造、改良する方向け
 
 | **項目**                 | **説明**                           | **コード内で使用しているか** |
