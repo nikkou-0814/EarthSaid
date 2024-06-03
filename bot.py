@@ -28,7 +28,7 @@ with open('testdata.json', 'r', encoding='utf-8') as f:
 async def on_ready():
     print("Bot起動完了！")
     await tree.sync()
-    await client.change_presence(activity=discord.Game(name=f"{VER}"))
+    await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"{VER}"))
     asyncio.create_task(send_eew_info())
     client.loop.create_task(fetch_earthquake_info())
 
