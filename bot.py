@@ -178,7 +178,12 @@ async def send_eew_info(data=None):
             chiiki = ', '.join(chiiki_list) if chiiki_list else '発表なし'
             magnitude = data.get('Magunitude', '不明')
             formatted_mag = "{:.1f}".format(float(magnitude)) if magnitude != '不明' else '不明'
-            max_intensity = float(data['MaxIntensity'])
+            max_intensity_str = data.get('MaxIntensity', '不明')
+
+            try:
+                max_intensity = float(max_intensity_str)
+            except ValueError:
+                max_intensity = 0.0  # '不明'の場合に対処
 
             if max_intensity >= 1:
                 if max_intensity < 2:
@@ -211,7 +216,6 @@ async def send_eew_info(data=None):
             else:
                 image = 'unknown.png'
                 formatshindo = '不明'
-
 
             title_type = "警報" if data.get('isWarn', False) else "予報"
             title = f"**テストデータです！**緊急地震速報（{title_type}）第{report_number}報"
@@ -255,7 +259,12 @@ async def send_eew_info(data=None):
                                     chiiki = ', '.join(chiiki_list) if chiiki_list else '発表なし'
                                     magnitude = data.get('Magunitude', '不明')
                                     formatted_mag = "{:.1f}".format(float(magnitude)) if magnitude != '不明' else '不明'
-                                    max_intensity = float(data['MaxIntensity'])
+                                    max_intensity_str = data.get('MaxIntensity', '不明')
+
+                                    try:
+                                        max_intensity = float(max_intensity_str)
+                                    except ValueError:
+                                        max_intensity = 0.0  # '不明'の場合に対処
 
                                     if max_intensity >= 1:
                                         if max_intensity < 2:
@@ -289,7 +298,6 @@ async def send_eew_info(data=None):
                                         image = 'unknown.png'
                                         formatshindo = '不明'
 
-
                                     title_type = "警報" if data.get('isWarn', False) else "予報"
                                     title = f"緊急地震速報（{title_type}）第{report_number}報"
                                     if is_final:
@@ -321,6 +329,7 @@ async def send_eew_info(data=None):
                 except aiohttp.ClientError as e:
                     print(f"WebSocket接続エラー: {e}")
                     await asyncio.sleep(10)
+
 
 @tree.command(name="testdata", description="eewのテストをします")
 async def testdata(interaction: discord.Interaction):
