@@ -6,122 +6,14 @@
             "Source": "大阪",
             "Status": "通常"
         },
-        "EventID": "20240329001440",
+        "EventID": "20240603063142",
         "Serial": 1,
-        "AnnouncedTime": "2024/03/29 00:15:18",
-        "OriginTime": "2024/03/29 00:14:38",
-        "Hypocenter": "石川県能登地方",
-        "Latitude": 37.2,
-        "Longitude": 136.8,
-        "Magunitude": 3.0,
-        "Depth": 10,
-        "MaxIntensity": "2",
-        "Accuracy": {
-            "Epicenter": "IPF 法（5 点以上）",
-            "Depth": "IPF 法（5 点以上）",
-            "Magnitude": "防災科研システム"
-        },
-        "MaxIntChange": {
-            "String": "ほとんど変化なし",
-            "Reason": "不明、未設定時、キャンセル時"
-        },
-        "WarnArea": [],
-        "isSea": false,
-        "isTraining": false,
-        "isAssumption": "PLUM",
-        "isWarn": false,
-        "isFinal": false,
-        "isCancel": false,
-        "OriginalText": "37 04 00 240329001518 C11 240329001438 ND20240329001440 NCN907 JD////////////// JN/// 390 N372 E1368 010 30 02 RK44209 RT00/// RC0//// 9999=",
-        "Pond": "23"
-    },
-    {
-        "Title": "緊急地震速報（予報）",
-        "CodeType": "Ｍ、最大予測震度及び主要動到達予測時刻の緊急地震速報",
-        "Issue": {
-            "Source": "大阪",
-            "Status": "通常"
-        },
-        "EventID": "20240329001440",
-        "Serial": 2,
-        "AnnouncedTime": "2024/03/29 00:16:18",
-        "OriginTime": "2024/03/29 00:14:38",
-        "Hypocenter": "石川県能登地方",
-        "Latitude": 37.2,
-        "Longitude": 136.8,
-        "Magunitude": 3.2,
-        "Depth": 10,
-        "MaxIntensity": "3",
-        "Accuracy": {
-            "Epicenter": "IPF 法（5 点以上）",
-            "Depth": "IPF 法（5 点以上）",
-            "Magnitude": "防災科研システム"
-        },
-        "MaxIntChange": {
-            "String": "ほとんど変化なし",
-            "Reason": "不明、未設定時、キャンセル時"
-        },
-        "WarnArea": [],
-        "isSea": false,
-        "isTraining": false,
-        "isAssumption": false,
-        "isWarn": false,
-        "isFinal": false,
-        "isCancel": false,
-        "OriginalText": "37 04 00 240329001618 C11 240329001438 ND20240329001440 NCN907 JD////////////// JN/// 390 N372 E1368 010 30 02 RK44209 RT00/// RC0//// 9999=",
-        "Pond": "23"
-    },
-    {
-        "Title": "緊急地震速報（予報）",
-        "CodeType": "Ｍ、最大予測震度及び主要動到達予測時刻の緊急地震速報",
-        "Issue": {
-            "Source": "大阪",
-            "Status": "通常"
-        },
-        "EventID": "20240329001440",
-        "Serial": 3,
-        "AnnouncedTime": "2024/03/29 00:17:18",
-        "OriginTime": "2024/03/29 00:14:38",
-        "Hypocenter": "石川県能登地方",
-        "Latitude": 37.2,
-        "Longitude": 136.8,
-        "Magunitude": 3.5,
-        "Depth": 10,
-        "MaxIntensity": "4",
-        "Accuracy": {
-            "Epicenter": "IPF 法（5 点以上）",
-            "Depth": "IPF 法（5 点以上）",
-            "Magnitude": "防災科研システム"
-        },
-        "MaxIntChange": {
-            "String": "ほとんど変化なし",
-            "Reason": "不明、未設定時、キャンセル時"
-        },
-        "WarnArea": [],
-        "isSea": false,
-        "isTraining": false,
-        "isAssumption": false,
-        "isWarn": false,
-        "isFinal": false,
-        "isCancel": false,
-        "OriginalText": "37 04 00 240329001718 C11 240329001438 ND20240329001440 NCN907 JD////////////// JN/// 390 N372 E1368 010 30 02 RK44209 RT00/// RC0//// 9999=",
-        "Pond": "23"
-    },
-    {
-        "Title": "緊急地震速報（最終）",
-        "CodeType": "Ｍ、最大予測震度及び主要動到達予測時刻の緊急地震速報",
-        "Issue": {
-            "Source": "大阪",
-            "Status": "通常"
-        },
-        "EventID": "20240329001440",
-        "Serial": 4,
-        "AnnouncedTime": "2024/03/29 00:18:18",
-        "OriginTime": "2024/03/29 00:14:38",
-        "Hypocenter": "石川県能登地方",
-        "Latitude": 37.2,
-        "Longitude": 136.8,
-        "Magunitude": 3.7,
+        "AnnouncedTime": "2024/06/03 06:31:43",
+        "OriginTime": "2024/06/03 06:31:41",
+        "Hypocenter": "北陸地方",
+        "Latitude": 37.4,
+        "Longitude": 137.4,
+        "Magunitude": 0,
         "Depth": 10,
         "MaxIntensity": "4.5",
         "Accuracy": {
@@ -135,9 +27,693 @@
         },
         "WarnArea": [],
         "isSea": false,
-        "isTraining": false,
-        "isAssumption": false,
+        "isTraining": true,
+        "isAssumption": "レベル",
         "isWarn": false,
+        "isFinal": false,
+        "isCancel": false,
+        "OriginalText": "37 04 00 240329001518 C11 240329001438 ND20240329001440 NCN907 JD////////////// JN/// 390 N372 E1368 010 30 02 RK44209 RT00/// RC0//// 9999=",
+        "Pond": "23"
+    },
+    {
+        "Title": "緊急地震速報（予報）",
+        "CodeType": "Ｍ、最大予測震度及び主要動到達予測時刻の緊急地震速報",
+        "Issue": {
+            "Source": "大阪",
+            "Status": "通常"
+        },
+        "EventID": "20240603063142",
+        "Serial": 2,
+        "AnnouncedTime": "2024/06/03 06:31:45",
+        "OriginTime": "2024/06/03 06:31:41",
+        "Hypocenter": "富山湾",
+        "Latitude": 37.4,
+        "Longitude": 137.4,
+        "Magunitude": 1.0,
+        "Depth": 10,
+        "MaxIntensity": "N/A",
+        "Accuracy": {
+            "Epicenter": "IPF 法（5 点以上）",
+            "Depth": "IPF 法（5 点以上）",
+            "Magnitude": "防災科研システム"
+        },
+        "MaxIntChange": {
+            "String": "ほとんど変化なし",
+            "Reason": "不明、未設定時、キャンセル時"
+        },
+        "WarnArea": [],
+        "isSea": false,
+        "isTraining": true,
+        "isAssumption": "PLUM",
+        "isWarn": false,
+        "isFinal": false,
+        "isCancel": false,
+        "OriginalText": "37 04 00 240329001618 C11 240329001438 ND20240329001440 NCN907 JD////////////// JN/// 390 N372 E1368 010 30 02 RK44209 RT00/// RC0//// 9999=",
+        "Pond": "23"
+    },
+    {
+        "Title": "緊急地震速報（予報）",
+        "CodeType": "Ｍ、最大予測震度及び主要動到達予測時刻の緊急地震速報",
+        "Issue": {
+            "Source": "大阪",
+            "Status": "通常"
+        },
+        "EventID": "20240603063142",
+        "Serial": 3,
+        "AnnouncedTime": "2024/06/03 06:31:46",
+        "OriginTime": "2024/06/03 06:31:41",
+        "Hypocenter": "富山湾",
+        "Latitude": 37.4,
+        "Longitude": 137.4,
+        "Magunitude": 1.0,
+        "Depth": 10,
+        "MaxIntensity": "N/A",
+        "Accuracy": {
+            "Epicenter": "IPF 法（5 点以上）",
+            "Depth": "IPF 法（5 点以上）",
+            "Magnitude": "防災科研システム"
+        },
+        "MaxIntChange": {
+            "String": "ほとんど変化なし",
+            "Reason": "不明、未設定時、キャンセル時"
+        },
+        "WarnArea": [],
+        "isSea": false,
+        "isTraining": true,
+        "isAssumption": "PLUM",
+        "isWarn": false,
+        "isFinal": false,
+        "isCancel": false,
+        "OriginalText": "37 04 00 240329001718 C11 240329001438 ND20240329001440 NCN907 JD////////////// JN/// 390 N372 E1368 010 30 02 RK44209 RT00/// RC0//// 9999=",
+        "Pond": "23"
+    },
+    {
+        "Title": "緊急地震速報（警報）",
+        "CodeType": "Ｍ、最大予測震度及び主要動到達予測時刻の緊急地震速報",
+        "Issue": {
+            "Source": "大阪",
+            "Status": "通常"
+        },
+        "EventID": "20240603063142",
+        "Serial": 4,
+        "AnnouncedTime": "2024/06/03 06:31:46",
+        "OriginTime": "2024/06/03 06:31:39",
+        "Hypocenter": "石川県能登地方",
+        "Latitude": 37.5,
+        "Longitude": 137.3,
+        "Magunitude": 6.5,
+        "Depth": 20,
+        "MaxIntensity": "5.5",
+        "Accuracy": {
+            "Epicenter": "IPF 法（5 点以上）",
+            "Depth": "IPF 法（5 点以上）",
+            "Magnitude": "防災科研システム"
+        },
+        "MaxIntChange": {
+            "String": "ほとんど変化なし",
+            "Reason": "不明、未設定時、キャンセル時"
+        },
+        "WarnArea": [],
+        "isSea": false,
+        "isTraining": true,
+        "isAssumption": false,
+        "isWarn": true,
+        "isFinal": false,
+        "isCancel": false,
+        "OriginalText": "37 04 00 240329001818 C11 240329001438 ND20240329001440 NCN907 JD////////////// JN/// 390 N372 E1368 010 30 02 RK44209 RT00/// RC0//// 9999=",
+        "Pond": "23"
+    },
+    {
+        "Title": "緊急地震速報（警報）",
+        "CodeType": "Ｍ、最大予測震度及び主要動到達予測時刻の緊急地震速報",
+        "Issue": {
+            "Source": "大阪",
+            "Status": "通常"
+        },
+        "EventID": "20240603063142",
+        "Serial": 5,
+        "AnnouncedTime": "2024/06/03 06:31:47",
+        "OriginTime": "2024/06/03 06:31:36",
+        "Hypocenter": "富山湾",
+        "Latitude": 37.4,
+        "Longitude": 137.5,
+        "Magunitude": 7.4,
+        "Depth": 30,
+        "MaxIntensity": "7",
+        "Accuracy": {
+            "Epicenter": "IPF 法（5 点以上）",
+            "Depth": "IPF 法（5 点以上）",
+            "Magnitude": "防災科研システム"
+        },
+        "MaxIntChange": {
+            "String": "ほとんど変化なし",
+            "Reason": "不明、未設定時、キャンセル時"
+        },
+        "WarnArea": [],
+        "isSea": false,
+        "isTraining": true,
+        "isAssumption": false,
+        "isWarn": true,
+        "isFinal": false,
+        "isCancel": false,
+        "OriginalText": "37 04 00 240329001818 C11 240329001438 ND20240329001440 NCN907 JD////////////// JN/// 390 N372 E1368 010 30 02 RK44209 RT00/// RC0//// 9999=",
+        "Pond": "23"
+    },
+    {
+        "Title": "緊急地震速報（警報）",
+        "CodeType": "Ｍ、最大予測震度及び主要動到達予測時刻の緊急地震速報",
+        "Issue": {
+            "Source": "大阪",
+            "Status": "通常"
+        },
+        "EventID": "20240603063142",
+        "Serial": 6,
+        "AnnouncedTime": "2024/06/03 06:31:47",
+        "OriginTime": "2024/06/03 06:31:34",
+        "Hypocenter": "新潟県上中越沖",
+        "Latitude": 37.6,
+        "Longitude": 137.6,
+        "Magunitude": 7.4,
+        "Depth": 40,
+        "MaxIntensity": "6",
+        "Accuracy": {
+            "Epicenter": "IPF 法（5 点以上）",
+            "Depth": "IPF 法（5 点以上）",
+            "Magnitude": "防災科研システム"
+        },
+        "MaxIntChange": {
+            "String": "ほとんど変化なし",
+            "Reason": "不明、未設定時、キャンセル時"
+        },
+        "WarnArea": [],
+        "isSea": false,
+        "isTraining": true,
+        "isAssumption": false,
+        "isWarn": true,
+        "isFinal": false,
+        "isCancel": false,
+        "OriginalText": "37 04 00 240329001818 C11 240329001438 ND20240329001440 NCN907 JD////////////// JN/// 390 N372 E1368 010 30 02 RK44209 RT00/// RC0//// 9999=",
+        "Pond": "23"
+    },
+    {
+        "Title": "緊急地震速報（警報）",
+        "CodeType": "Ｍ、最大予測震度及び主要動到達予測時刻の緊急地震速報",
+        "Issue": {
+            "Source": "大阪",
+            "Status": "通常"
+        },
+        "EventID": "20240603063142",
+        "Serial": 7,
+        "AnnouncedTime": "2024/06/03 06:31:48",
+        "OriginTime": "2024/06/03 06:31:38",
+        "Hypocenter": "能登半島沖",
+        "Latitude": 37.5,
+        "Longitude": 137.4,
+        "Magunitude": 6.7,
+        "Depth": 30,
+        "MaxIntensity": "5.5",
+        "Accuracy": {
+            "Epicenter": "IPF 法（5 点以上）",
+            "Depth": "IPF 法（5 点以上）",
+            "Magnitude": "防災科研システム"
+        },
+        "MaxIntChange": {
+            "String": "ほとんど変化なし",
+            "Reason": "不明、未設定時、キャンセル時"
+        },
+        "WarnArea": [],
+        "isSea": false,
+        "isTraining": true,
+        "isAssumption": false,
+        "isWarn": true,
+        "isFinal": false,
+        "isCancel": false,
+        "OriginalText": "37 04 00 240329001818 C11 240329001438 ND20240329001440 NCN907 JD////////////// JN/// 390 N372 E1368 010 30 02 RK44209 RT00/// RC0//// 9999=",
+        "Pond": "23"
+    },
+    {
+        "Title": "緊急地震速報（警報）",
+        "CodeType": "Ｍ、最大予測震度及び主要動到達予測時刻の緊急地震速報",
+        "Issue": {
+            "Source": "大阪",
+            "Status": "通常"
+        },
+        "EventID": "20240603063142",
+        "Serial": 8,
+        "AnnouncedTime": "2024/06/03 06:31:49",
+        "OriginTime": "2024/06/03 06:31:40",
+        "Hypocenter": "富山湾",
+        "Latitude": 37.4,
+        "Longitude": 137.3,
+        "Magunitude": 6.3,
+        "Depth": 10,
+        "MaxIntensity": "6",
+        "Accuracy": {
+            "Epicenter": "IPF 法（5 点以上）",
+            "Depth": "IPF 法（5 点以上）",
+            "Magnitude": "防災科研システム"
+        },
+        "MaxIntChange": {
+            "String": "ほとんど変化なし",
+            "Reason": "不明、未設定時、キャンセル時"
+        },
+        "WarnArea": [],
+        "isSea": false,
+        "isTraining": true,
+        "isAssumption": false,
+        "isWarn": true,
+        "isFinal": false,
+        "isCancel": false,
+        "OriginalText": "37 04 00 240329001818 C11 240329001438 ND20240329001440 NCN907 JD////////////// JN/// 390 N372 E1368 010 30 02 RK44209 RT00/// RC0//// 9999=",
+        "Pond": "23"
+    },
+    {
+        "Title": "緊急地震速報（警報）",
+        "CodeType": "Ｍ、最大予測震度及び主要動到達予測時刻の緊急地震速報",
+        "Issue": {
+            "Source": "大阪",
+            "Status": "通常"
+        },
+        "EventID": "20240603063142",
+        "Serial": 9,
+        "AnnouncedTime": "2024/06/03 06:31:50",
+        "OriginTime": "2024/06/03 06:31:40",
+        "Hypocenter": "富山湾",
+        "Latitude": 37.4,
+        "Longitude": 137.3,
+        "Magunitude": 6.3,
+        "Depth": 10,
+        "MaxIntensity": "6",
+        "Accuracy": {
+            "Epicenter": "IPF 法（5 点以上）",
+            "Depth": "IPF 法（5 点以上）",
+            "Magnitude": "防災科研システム"
+        },
+        "MaxIntChange": {
+            "String": "ほとんど変化なし",
+            "Reason": "不明、未設定時、キャンセル時"
+        },
+        "WarnArea": [],
+        "isSea": false,
+        "isTraining": true,
+        "isAssumption": false,
+        "isWarn": true,
+        "isFinal": false,
+        "isCancel": false,
+        "OriginalText": "37 04 00 240329001818 C11 240329001438 ND20240329001440 NCN907 JD////////////// JN/// 390 N372 E1368 010 30 02 RK44209 RT00/// RC0//// 9999=",
+        "Pond": "23"
+    },
+    {
+        "Title": "緊急地震速報（警報）",
+        "CodeType": "Ｍ、最大予測震度及び主要動到達予測時刻の緊急地震速報",
+        "Issue": {
+            "Source": "大阪",
+            "Status": "通常"
+        },
+        "EventID": "20240603063142",
+        "Serial": 10,
+        "AnnouncedTime": "2024/06/03 06:31:50",
+        "OriginTime": "2024/06/03 06:31:40",
+        "Hypocenter": "富山湾",
+        "Latitude": 37.4,
+        "Longitude": 137.3,
+        "Magunitude": 6.3,
+        "Depth": 10,
+        "MaxIntensity": "6",
+        "Accuracy": {
+            "Epicenter": "IPF 法（5 点以上）",
+            "Depth": "IPF 法（5 点以上）",
+            "Magnitude": "防災科研システム"
+        },
+        "MaxIntChange": {
+            "String": "ほとんど変化なし",
+            "Reason": "不明、未設定時、キャンセル時"
+        },
+        "WarnArea": [],
+        "isSea": false,
+        "isTraining": true,
+        "isAssumption": false,
+        "isWarn": true,
+        "isFinal": false,
+        "isCancel": false,
+        "OriginalText": "37 04 00 240329001818 C11 240329001438 ND20240329001440 NCN907 JD////////////// JN/// 390 N372 E1368 010 30 02 RK44209 RT00/// RC0//// 9999=",
+        "Pond": "23"
+    },
+    {
+        "Title": "緊急地震速報（警報）",
+        "CodeType": "Ｍ、最大予測震度及び主要動到達予測時刻の緊急地震速報",
+        "Issue": {
+            "Source": "大阪",
+            "Status": "通常"
+        },
+        "EventID": "20240603063142",
+        "Serial": 11,
+        "AnnouncedTime": "2024/06/03 06:31:52",
+        "OriginTime": "2024/06/03 06:31:40",
+        "Hypocenter": "富山湾",
+        "Latitude": 37.4,
+        "Longitude": 137.3,
+        "Magunitude": 6.3,
+        "Depth": 10,
+        "MaxIntensity": "6",
+        "Accuracy": {
+            "Epicenter": "IPF 法（5 点以上）",
+            "Depth": "IPF 法（5 点以上）",
+            "Magnitude": "防災科研システム"
+        },
+        "MaxIntChange": {
+            "String": "ほとんど変化なし",
+            "Reason": "不明、未設定時、キャンセル時"
+        },
+        "WarnArea": [],
+        "isSea": false,
+        "isTraining": true,
+        "isAssumption": false,
+        "isWarn": true,
+        "isFinal": false,
+        "isCancel": false,
+        "OriginalText": "37 04 00 240329001818 C11 240329001438 ND20240329001440 NCN907 JD////////////// JN/// 390 N372 E1368 010 30 02 RK44209 RT00/// RC0//// 9999=",
+        "Pond": "23"
+    },
+    {
+        "Title": "緊急地震速報（警報）",
+        "CodeType": "Ｍ、最大予測震度及び主要動到達予測時刻の緊急地震速報",
+        "Issue": {
+            "Source": "大阪",
+            "Status": "通常"
+        },
+        "EventID": "20240603063142",
+        "Serial": 12,
+        "AnnouncedTime": "2024/06/03 06:31:52",
+        "OriginTime": "2024/06/03 06:31:39",
+        "Hypocenter": "能登半島沖",
+        "Latitude": 37.5,
+        "Longitude": 137.4,
+        "Magunitude": 6.3,
+        "Depth": 10,
+        "MaxIntensity": "6",
+        "Accuracy": {
+            "Epicenter": "IPF 法（5 点以上）",
+            "Depth": "IPF 法（5 点以上）",
+            "Magnitude": "防災科研システム"
+        },
+        "MaxIntChange": {
+            "String": "ほとんど変化なし",
+            "Reason": "不明、未設定時、キャンセル時"
+        },
+        "WarnArea": [],
+        "isSea": false,
+        "isTraining": true,
+        "isAssumption": false,
+        "isWarn": true,
+        "isFinal": false,
+        "isCancel": false,
+        "OriginalText": "37 04 00 240329001818 C11 240329001438 ND20240329001440 NCN907 JD////////////// JN/// 390 N372 E1368 010 30 02 RK44209 RT00/// RC0//// 9999=",
+        "Pond": "23"
+    },
+    {
+        "Title": "緊急地震速報（警報）",
+        "CodeType": "Ｍ、最大予測震度及び主要動到達予測時刻の緊急地震速報",
+        "Issue": {
+            "Source": "大阪",
+            "Status": "通常"
+        },
+        "EventID": "20240603063142",
+        "Serial": 13,
+        "AnnouncedTime": "2024/06/03 06:31:54",
+        "OriginTime": "2024/06/03 06:31:39",
+        "Hypocenter": "石川県能登地方",
+        "Latitude": 37.5,
+        "Longitude": 137.3,
+        "Magunitude": 6.5,
+        "Depth": 20,
+        "MaxIntensity": "6",
+        "Accuracy": {
+            "Epicenter": "IPF 法（5 点以上）",
+            "Depth": "IPF 法（5 点以上）",
+            "Magnitude": "防災科研システム"
+        },
+        "MaxIntChange": {
+            "String": "ほとんど変化なし",
+            "Reason": "不明、未設定時、キャンセル時"
+        },
+        "WarnArea": [],
+        "isSea": false,
+        "isTraining": true,
+        "isAssumption": false,
+        "isWarn": true,
+        "isFinal": false,
+        "isCancel": false,
+        "OriginalText": "37 04 00 240329001818 C11 240329001438 ND20240329001440 NCN907 JD////////////// JN/// 390 N372 E1368 010 30 02 RK44209 RT00/// RC0//// 9999=",
+        "Pond": "23"
+    },
+    {
+        "Title": "緊急地震速報（警報）",
+        "CodeType": "Ｍ、最大予測震度及び主要動到達予測時刻の緊急地震速報",
+        "Issue": {
+            "Source": "大阪",
+            "Status": "通常"
+        },
+        "EventID": "20240603063142",
+        "Serial": 14,
+        "AnnouncedTime": "2024/06/03 06:32:11",
+        "OriginTime": "2024/06/03 06:31:39",
+        "Hypocenter": "石川県能登地方",
+        "Latitude": 37.5,
+        "Longitude": 137.3,
+        "Magunitude": 6.2,
+        "Depth": 10,
+        "MaxIntensity": "6",
+        "Accuracy": {
+            "Epicenter": "IPF 法（5 点以上）",
+            "Depth": "IPF 法（5 点以上）",
+            "Magnitude": "防災科研システム"
+        },
+        "MaxIntChange": {
+            "String": "ほとんど変化なし",
+            "Reason": "不明、未設定時、キャンセル時"
+        },
+        "WarnArea": [],
+        "isSea": false,
+        "isTraining": true,
+        "isAssumption": false,
+        "isWarn": true,
+        "isFinal": false,
+        "isCancel": false,
+        "OriginalText": "37 04 00 240329001818 C11 240329001438 ND20240329001440 NCN907 JD////////////// JN/// 390 N372 E1368 010 30 02 RK44209 RT00/// RC0//// 9999=",
+        "Pond": "23"
+    },
+    {
+        "Title": "緊急地震速報（警報）",
+        "CodeType": "Ｍ、最大予測震度及び主要動到達予測時刻の緊急地震速報",
+        "Issue": {
+            "Source": "大阪",
+            "Status": "通常"
+        },
+        "EventID": "20240603063142",
+        "Serial": 15,
+        "AnnouncedTime": "2024/06/03 06:32:12",
+        "OriginTime": "2024/06/03 06:31:39",
+        "Hypocenter": "石川県能登地方",
+        "Latitude": 37.5,
+        "Longitude": 137.3,
+        "Magunitude": 6.2,
+        "Depth": 10,
+        "MaxIntensity": "6",
+        "Accuracy": {
+            "Epicenter": "IPF 法（5 点以上）",
+            "Depth": "IPF 法（5 点以上）",
+            "Magnitude": "防災科研システム"
+        },
+        "MaxIntChange": {
+            "String": "ほとんど変化なし",
+            "Reason": "不明、未設定時、キャンセル時"
+        },
+        "WarnArea": [],
+        "isSea": false,
+        "isTraining": true,
+        "isAssumption": false,
+        "isWarn": true,
+        "isFinal": false,
+        "isCancel": false,
+        "OriginalText": "37 04 00 240329001818 C11 240329001438 ND20240329001440 NCN907 JD////////////// JN/// 390 N372 E1368 010 30 02 RK44209 RT00/// RC0//// 9999=",
+        "Pond": "23"
+    },
+    {
+        "Title": "緊急地震速報（警報）",
+        "CodeType": "Ｍ、最大予測震度及び主要動到達予測時刻の緊急地震速報",
+        "Issue": {
+            "Source": "大阪",
+            "Status": "通常"
+        },
+        "EventID": "20240603063142",
+        "Serial": 16,
+        "AnnouncedTime": "2024/06/03 06:32:32",
+        "OriginTime": "2024/06/03 06:31:39",
+        "Hypocenter": "石川県能登地方",
+        "Latitude": 37.5,
+        "Longitude": 137.3,
+        "Magunitude": 6.2,
+        "Depth": 20,
+        "MaxIntensity": "6",
+        "Accuracy": {
+            "Epicenter": "IPF 法（5 点以上）",
+            "Depth": "IPF 法（5 点以上）",
+            "Magnitude": "防災科研システム"
+        },
+        "MaxIntChange": {
+            "String": "ほとんど変化なし",
+            "Reason": "不明、未設定時、キャンセル時"
+        },
+        "WarnArea": [],
+        "isSea": false,
+        "isTraining": true,
+        "isAssumption": false,
+        "isWarn": true,
+        "isFinal": false,
+        "isCancel": false,
+        "OriginalText": "37 04 00 240329001818 C11 240329001438 ND20240329001440 NCN907 JD////////////// JN/// 390 N372 E1368 010 30 02 RK44209 RT00/// RC0//// 9999=",
+        "Pond": "23"
+    },
+    {
+        "Title": "緊急地震速報（警報）",
+        "CodeType": "Ｍ、最大予測震度及び主要動到達予測時刻の緊急地震速報",
+        "Issue": {
+            "Source": "大阪",
+            "Status": "通常"
+        },
+        "EventID": "20240603063142",
+        "Serial": 17,
+        "AnnouncedTime": "2024/06/03 06:32:44",
+        "OriginTime": "2024/06/03 06:31:39",
+        "Hypocenter": "石川県能登地方",
+        "Latitude": 37.5,
+        "Longitude": 137.3,
+        "Magunitude": 6.2,
+        "Depth": 20,
+        "MaxIntensity": "6",
+        "Accuracy": {
+            "Epicenter": "IPF 法（5 点以上）",
+            "Depth": "IPF 法（5 点以上）",
+            "Magnitude": "防災科研システム"
+        },
+        "MaxIntChange": {
+            "String": "ほとんど変化なし",
+            "Reason": "不明、未設定時、キャンセル時"
+        },
+        "WarnArea": [],
+        "isSea": false,
+        "isTraining": true,
+        "isAssumption": false,
+        "isWarn": true,
+        "isFinal": false,
+        "isCancel": false,
+        "OriginalText": "37 04 00 240329001818 C11 240329001438 ND20240329001440 NCN907 JD////////////// JN/// 390 N372 E1368 010 30 02 RK44209 RT00/// RC0//// 9999=",
+        "Pond": "23"
+    },
+    {
+        "Title": "緊急地震速報（警報）",
+        "CodeType": "Ｍ、最大予測震度及び主要動到達予測時刻の緊急地震速報",
+        "Issue": {
+            "Source": "大阪",
+            "Status": "通常"
+        },
+        "EventID": "20240603063142",
+        "Serial": 18,
+        "AnnouncedTime": "2024/06/03 06:33:04",
+        "OriginTime": "2024/06/03 06:31:39",
+        "Hypocenter": "石川県能登地方",
+        "Latitude": 37.5,
+        "Longitude": 137.3,
+        "Magunitude": 6.2,
+        "Depth": 20,
+        "MaxIntensity": "6",
+        "Accuracy": {
+            "Epicenter": "IPF 法（5 点以上）",
+            "Depth": "IPF 法（5 点以上）",
+            "Magnitude": "防災科研システム"
+        },
+        "MaxIntChange": {
+            "String": "ほとんど変化なし",
+            "Reason": "不明、未設定時、キャンセル時"
+        },
+        "WarnArea": [],
+        "isSea": false,
+        "isTraining": true,
+        "isAssumption": false,
+        "isWarn": true,
+        "isFinal": false,
+        "isCancel": false,
+        "OriginalText": "37 04 00 240329001818 C11 240329001438 ND20240329001440 NCN907 JD////////////// JN/// 390 N372 E1368 010 30 02 RK44209 RT00/// RC0//// 9999=",
+        "Pond": "23"
+    },
+    {
+        "Title": "緊急地震速報（警報）",
+        "CodeType": "Ｍ、最大予測震度及び主要動到達予測時刻の緊急地震速報",
+        "Issue": {
+            "Source": "大阪",
+            "Status": "通常"
+        },
+        "EventID": "20240603063142",
+        "Serial": 19,
+        "AnnouncedTime": "2024/06/03 06:33:24",
+        "OriginTime": "2024/06/03 06:31:39",
+        "Hypocenter": "石川県能登地方",
+        "Latitude": 37.5,
+        "Longitude": 137.3,
+        "Magunitude": 6.2,
+        "Depth": 20,
+        "MaxIntensity": "6",
+        "Accuracy": {
+            "Epicenter": "IPF 法（5 点以上）",
+            "Depth": "IPF 法（5 点以上）",
+            "Magnitude": "防災科研システム"
+        },
+        "MaxIntChange": {
+            "String": "ほとんど変化なし",
+            "Reason": "不明、未設定時、キャンセル時"
+        },
+        "WarnArea": [],
+        "isSea": false,
+        "isTraining": true,
+        "isAssumption": false,
+        "isWarn": true,
+        "isFinal": false,
+        "isCancel": false,
+        "OriginalText": "37 04 00 240329001818 C11 240329001438 ND20240329001440 NCN907 JD////////////// JN/// 390 N372 E1368 010 30 02 RK44209 RT00/// RC0//// 9999=",
+        "Pond": "23"
+    },
+    {
+        "Title": "緊急地震速報（警報）",
+        "CodeType": "Ｍ、最大予測震度及び主要動到達予測時刻の緊急地震速報",
+        "Issue": {
+            "Source": "大阪",
+            "Status": "通常"
+        },
+        "EventID": "20240603063142",
+        "Serial": 20,
+        "AnnouncedTime": "2024/06/03 06:33:24",
+        "OriginTime": "2024/06/03 06:31:39",
+        "Hypocenter": "石川県能登地方",
+        "Latitude": 37.5,
+        "Longitude": 137.3,
+        "Magunitude": 6.2,
+        "Depth": 20,
+        "MaxIntensity": "6",
+        "Accuracy": {
+            "Epicenter": "IPF 法（5 点以上）",
+            "Depth": "IPF 法（5 点以上）",
+            "Magnitude": "防災科研システム"
+        },
+        "MaxIntChange": {
+            "String": "ほとんど変化なし",
+            "Reason": "不明、未設定時、キャンセル時"
+        },
+        "WarnArea": [],
+        "isSea": false,
+        "isTraining": true,
+        "isAssumption": false,
+        "isWarn": true,
         "isFinal": true,
         "isCancel": false,
         "OriginalText": "37 04 00 240329001818 C11 240329001438 ND20240329001440 NCN907 JD////////////// JN/// 390 N372 E1368 010 30 02 RK44209 RT00/// RC0//// 9999=",

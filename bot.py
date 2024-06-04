@@ -183,7 +183,7 @@ async def send_eew_info(data=None):
             try:
                 max_intensity = float(max_intensity_str)
             except ValueError:
-                max_intensity = 0.0  # '不明'の場合に対処
+                max_intensity = 0.0
 
             if max_intensity >= 1:
                 if max_intensity < 2:
@@ -240,7 +240,7 @@ async def send_eew_info(data=None):
             embed.set_thumbnail(url=f"attachment://{image}")
 
             channel = client.get_channel(channel_id)
-            await channel.send(embed=embed, file=file)
+            await channel.send(embed=embed, file=file, silent=True)
         else:
             while True:
                 try:
@@ -264,7 +264,7 @@ async def send_eew_info(data=None):
                                     try:
                                         max_intensity = float(max_intensity_str)
                                     except ValueError:
-                                        max_intensity = 0.0  # '不明'の場合に対処
+                                        max_intensity = 0.0
 
                                     if max_intensity >= 1:
                                         if max_intensity < 2:
