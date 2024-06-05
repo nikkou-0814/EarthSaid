@@ -53,8 +53,18 @@ async def fetch_earthquake_info():
                         else:
                             depth = f"{depth}km"
                         max_intensity = details['maxScale']
-                        tsunami_info = data.get("earthquake", {}).get("domesticTsunami")
-                        occurrence_time = data.get("earthquake", {}).get("time")
+                        domestic_tsunami = details.get("domesticTsunami", "情報なし")
+                        occurrence_time = details.get("time")
+
+                        tsunami_text = (
+                            "なし" if domestic_tsunami == "None" else
+                            "不明" if domestic_tsunami == "Unknown" else
+                            "調査中" if domestic_tsunami == "Checking" else
+                            "若干の海面変動" if domestic_tsunami == "NonEffective" else
+                            "津波注意報" if domestic_tsunami == "Watch" else
+                            "津波警報" if domestic_tsunami == "Warning" else
+                            "情報なし"
+                        )
 
                         if max_intensity >= 70: #7
                             color = 0x9e00ff
@@ -101,6 +111,7 @@ async def fetch_earthquake_info():
                             embed = discord.Embed(title="🌍 震度速報", color=color)
                             embed.add_field(name="", value=f"{occurrence_time}ごろ、\n最大震度{int(max_intensity / 10)}を観測する地震が発生しました。\n津波の有無については、現在調査中です。\n今後の情報に注意してください。", inline=False)
                             embed.add_field(name="震度情報", value=points_info, inline=False)
+                            embed.add_field(name="津波情報", value=tsunami_text, inline=False)
                             embed.set_footer(text=f"{client.user.name}・{source} | Version {VER}", icon_url=f"{client.user.avatar}")
 
                             file = discord.File(image, filename=image)
@@ -111,10 +122,7 @@ async def fetch_earthquake_info():
 
                         elif quaketype == "Destination": #震源情報
                             embed = discord.Embed(title="🌍 震源情報", color=color)
-                            if tsunami_info == "None":
-                                embed.add_field(name="", value=f"{occurrence_time}ごろ、地震がありました。\nこの地震による津波の心配はありません。", inline=False)
-                            else:
-                                embed.add_field(name="", value=f"{occurrence_time}ごろ、地震がありました。\n現在、この地震による津波予報等を発表中です。", inline=False)
+                            embed.add_field(name="", value=f"{occurrence_time}ごろ、地震がありました。\nこの地震による津波の心配は{tsunami_text}。", inline=False)
                             embed.add_field(name="震源", value=place, inline=True)
                             embed.add_field(name="マグニチュード", value=f"M{formatted_mag}", inline=True)
                             embed.add_field(name="深さ", value=depth, inline=True)
@@ -125,10 +133,7 @@ async def fetch_earthquake_info():
 
                         elif quaketype == "DetailScale": #地震情報
                             embed = discord.Embed(title="🌍 地震情報", color=color)
-                            if tsunami_info == "None":
-                                embed.add_field(name="", value=f"{occurrence_time}ごろ、\n{place}で最大震度{int(max_intensity / 10)}の地震がありました。\nこの地震による津波の心配はありません。", inline=False)
-                            else:
-                                embed.add_field(name="", value=f"{occurrence_time}ごろ、\n{place}で最大震度{int(max_intensity / 10)}の地震がありました。\n現在、この地震による津波予報等を発表中です。", inline=False)
+                            embed.add_field(name="", value=f"{occurrence_time}ごろ、\n{place}で最大震度{int(max_intensity / 10)}の地震がありました。\nこの地震による津波の心配は{tsunami_text}。", inline=False)
                             embed.add_field(name="震央", value=place, inline=True)
                             embed.add_field(name="マグニチュード", value=f"M{formatted_mag}", inline=True)
                             embed.add_field(name="深さ", value=depth, inline=True)
@@ -164,6 +169,8 @@ async def fetch_earthquake_info():
 
                             channel = client.get_channel(channel_id)
                             await channel.send(embed=embed, file=file)
+
+
 
 #eew
 async def send_eew_info(data=None):
