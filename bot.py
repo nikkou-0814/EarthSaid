@@ -57,12 +57,12 @@ async def fetch_earthquake_info():
                         occurrence_time = details.get("time")
 
                         tsunami_text = (
-                            "なし" if domestic_tsunami == "None" else
-                            "不明" if domestic_tsunami == "Unknown" else
-                            "調査中" if domestic_tsunami == "Checking" else
-                            "若干の海面変動" if domestic_tsunami == "NonEffective" else
-                            "津波注意報" if domestic_tsunami == "Watch" else
-                            "津波警報" if domestic_tsunami == "Warning" else
+                            "この地震による津波の心配はありません" if domestic_tsunami == "None" else
+                            "この地震による津波の有無は不明です" if domestic_tsunami == "Unknown" else
+                            "この地震による津波の有無は現在調査中です" if domestic_tsunami == "Checking" else
+                            "この地震により若干の海面変動が予想されますが、被害の心配はありません" if domestic_tsunami == "NonEffective" else
+                            "この地震により津波注意報が発表されています" if domestic_tsunami == "Watch" else
+                            "この地震により津波警報が発表されています" if domestic_tsunami == "Warning" else
                             "情報なし"
                         )
 
@@ -105,7 +105,6 @@ async def fetch_earthquake_info():
                             color = 0x515b63
                             image = 'unknown.png'
 
-                      
                         if quaketype == "ScalePrompt": #震度速報
                             points_info = "\n".join([f"{point['addr']}: 震度{int(point['scale'] / 10)}" for point in data['points']])
                             embed = discord.Embed(title="🌍 震度速報", color=color)
@@ -122,18 +121,18 @@ async def fetch_earthquake_info():
 
                         elif quaketype == "Destination": #震源情報
                             embed = discord.Embed(title="🌍 震源情報", color=color)
-                            embed.add_field(name="", value=f"{occurrence_time}ごろ、地震がありました。\nこの地震による津波の心配は{tsunami_text}。", inline=False)
+                            embed.add_field(name="", value=f"{occurrence_time}ごろ、地震がありました。\n{tsunami_text}。", inline=False)
                             embed.add_field(name="震源", value=place, inline=True)
                             embed.add_field(name="マグニチュード", value=f"M{formatted_mag}", inline=True)
                             embed.add_field(name="深さ", value=depth, inline=True)
                             embed.set_footer(text=f"{client.user.name}・{source} | Version {VER}", icon_url=f"{client.user.avatar}")
 
                             channel = client.get_channel(channel_id)
-                            await channel.send(embed=embed, file=file)
+                            await channel.send(embed=embed)
 
                         elif quaketype == "DetailScale": #地震情報
                             embed = discord.Embed(title="🌍 地震情報", color=color)
-                            embed.add_field(name="", value=f"{occurrence_time}ごろ、\n{place}で最大震度{int(max_intensity / 10)}の地震がありました。\nこの地震による津波の心配は{tsunami_text}。", inline=False)
+                            embed.add_field(name="", value=f"{occurrence_time}ごろ、\n{place}で最大震度{int(max_intensity / 10)}の地震がありました。\n{tsunami_text}。", inline=False)
                             embed.add_field(name="震央", value=place, inline=True)
                             embed.add_field(name="マグニチュード", value=f"M{formatted_mag}", inline=True)
                             embed.add_field(name="深さ", value=depth, inline=True)
