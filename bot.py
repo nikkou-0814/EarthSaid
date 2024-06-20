@@ -110,7 +110,6 @@ async def fetch_earthquake_info():
                             embed = discord.Embed(title="🌍 震度速報", color=color)
                             embed.add_field(name="", value=f"{occurrence_time}ごろ、\n最大震度{int(max_intensity / 10)}を観測する地震が発生しました。\n津波の有無については、現在調査中です。\n今後の情報に注意してください。", inline=False)
                             embed.add_field(name="震度情報", value=points_info, inline=False)
-                            embed.add_field(name="津波情報", value=tsunami_text, inline=False)
                             embed.set_footer(text=f"{client.user.name}・{source} | Version {VER}", icon_url=f"{client.user.avatar}")
 
                             file = discord.File(image, filename=image)
