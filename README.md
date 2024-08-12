@@ -25,17 +25,17 @@ git clone https://github.com/nikkou-0814/Earth-Said-BOT.git
 
 ### 環境変数
 
-1. .env をコピーします。
+1. .env.exampleファイルをコピーします。
 
-```bash
-cp .env.example .env
+2. ファイル名を```.env```に変更
+
+2. Discord BOT のトークンとチャンネルIDを記載します。
+
+```env
+TOKEN=<DISOCRD_TOKEN>
+
+ChannelID=<DISCORD_ChannelID>
 ```
-
-Discord BOT のトークンとチャンネルIDを記載します。
-
-2. TOKEN=<DISOCRD_TOKEN>
-
-3. ChannelID=<DISCORD_ChannelID>
 
 ## 依存関係のインストールと起動
 
@@ -45,6 +45,23 @@ pip install -r requirements.txt
 ```bash
 python bot.py
 ```
+
+## 情報送信条件
+### 使用方法
+
+```Forecast```、```Warning```、```All```から一つ選択
+
+### Forecast
+
+```Forecast```の場合は緊急地震速報（予報）のみ送信します。
+
+### Warning
+
+```Warning```の場合は緊急地震速報（警報）のみ送信します。
+
+### All
+
+```All```の場合はすべての緊急地震速報を送信します。
 
 ## ```testdata.json```の記述(wolfx APIの仕様に基づく)
 ### このリポジトリを改造、改良する方向け
@@ -57,7 +74,7 @@ python bot.py
 | **issueSource**         | 発表機関                            | NO                     |
 | **issueStatus**         | 発表の状態                          | NO                     |
 | **eventID**             | イベントID                          | NO                     |
-| **serial**              | 発表回数                            | YES                    |
+| **serial**              | 報数                               | YES                    |
 | **announcedTime**       | 発表時間                            | YES                    |
 | **originTime**          | 地震発生時間                         | YES                    |
 | **hypocenter**          | 震源地                              | YES                    |
@@ -66,9 +83,9 @@ python bot.py
 | **magnitude**           | マグニチュード                       | YES                    |
 | **depth**               | 震源の深さ                          | YES                    |
 | **maxIntensity**        | 最大震度                             | YES                   |
-| **accuracyEpicenter**   | 震央の精度に関する説明               | NO                      |
-| **accuracyDepth**       | 震源の深さの精度に関する説明         | NO                       |
-| **accuracyMagnitude**   | マグニチュードの精度に関する説明     | NO                        |
+| **accuracyEpicenter**   | 震央の精度に関する説明               | YES                      |
+| **accuracyDepth**       | 震源の深さの精度に関する説明         | YES                       |
+| **accuracyMagnitude**   | マグニチュードの精度に関する説明     | YES                        |
 | **maxIntChangeString**  | 最大震度の変更に関する説明           | NO                       |
 | **maxIntChangeReason**  | 最大震度の変更理由                   | NO                     |
 | **warnAreaChiiki**      | 警報が出される地域                   | YES                    |

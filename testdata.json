@@ -15,11 +15,11 @@
         "Longitude": 137.4,
         "Magunitude": 0,
         "Depth": 10,
-        "MaxIntensity": "4.5",
+        "MaxIntensity": "5弱",
         "Accuracy": {
-            "Epicenter": "IPF 法（5 点以上）",
-            "Depth": "IPF 法（5 点以上）",
-            "Magnitude": "防災科研システム"
+            "Epicenter": "P波/S波レベル越え",
+            "Depth": "P波/S波レベル越え",
+            "Magnitude": "P波/S波レベル越え"
         },
         "MaxIntChange": {
             "String": "ほとんど変化なし",
@@ -28,7 +28,7 @@
         "WarnArea": [],
         "isSea": false,
         "isTraining": true,
-        "isAssumption": "レベル",
+        "isAssumption": true,
         "isWarn": false,
         "isFinal": false,
         "isCancel": false,
@@ -53,9 +53,9 @@
         "Depth": 10,
         "MaxIntensity": "N/A",
         "Accuracy": {
-            "Epicenter": "IPF 法（5 点以上）",
-            "Depth": "IPF 法（5 点以上）",
-            "Magnitude": "防災科研システム"
+            "Epicenter": "IPF法(1点)",
+            "Depth": "IPF法(1点)",
+            "Magnitude": "IPF法(1点)"
         },
         "MaxIntChange": {
             "String": "ほとんど変化なし",
@@ -64,7 +64,7 @@
         "WarnArea": [],
         "isSea": false,
         "isTraining": true,
-        "isAssumption": "PLUM",
+        "isAssumption": true,
         "isWarn": false,
         "isFinal": false,
         "isCancel": false,
@@ -89,9 +89,9 @@
         "Depth": 10,
         "MaxIntensity": "N/A",
         "Accuracy": {
-            "Epicenter": "IPF 法（5 点以上）",
-            "Depth": "IPF 法（5 点以上）",
-            "Magnitude": "防災科研システム"
+            "Epicenter": "IPF法(1点)",
+            "Depth": "IPF法(1点)",
+            "Magnitude": "IPF法(1点)"
         },
         "MaxIntChange": {
             "String": "ほとんど変化なし",
@@ -100,7 +100,7 @@
         "WarnArea": [],
         "isSea": false,
         "isTraining": true,
-        "isAssumption": "PLUM",
+        "isAssumption": true,
         "isWarn": false,
         "isFinal": false,
         "isCancel": false,
@@ -123,7 +123,7 @@
         "Longitude": 137.3,
         "Magunitude": 6.5,
         "Depth": 20,
-        "MaxIntensity": "5.5",
+        "MaxIntensity": "6弱",
         "Accuracy": {
             "Epicenter": "IPF 法（5 点以上）",
             "Depth": "IPF 法（5 点以上）",
@@ -195,7 +195,7 @@
         "Longitude": 137.6,
         "Magunitude": 7.4,
         "Depth": 40,
-        "MaxIntensity": "6",
+        "MaxIntensity": "6強",
         "Accuracy": {
             "Epicenter": "IPF 法（5 点以上）",
             "Depth": "IPF 法（5 点以上）",
@@ -231,7 +231,7 @@
         "Longitude": 137.4,
         "Magunitude": 6.7,
         "Depth": 30,
-        "MaxIntensity": "5.5",
+        "MaxIntensity": "6弱",
         "Accuracy": {
             "Epicenter": "IPF 法（5 点以上）",
             "Depth": "IPF 法（5 点以上）",
@@ -267,7 +267,7 @@
         "Longitude": 137.3,
         "Magunitude": 6.3,
         "Depth": 10,
-        "MaxIntensity": "6",
+        "MaxIntensity": "6強",
         "Accuracy": {
             "Epicenter": "IPF 法（5 点以上）",
             "Depth": "IPF 法（5 点以上）",
@@ -303,7 +303,7 @@
         "Longitude": 137.3,
         "Magunitude": 6.3,
         "Depth": 10,
-        "MaxIntensity": "6",
+        "MaxIntensity": "6強",
         "Accuracy": {
             "Epicenter": "IPF 法（5 点以上）",
             "Depth": "IPF 法（5 点以上）",
@@ -339,7 +339,7 @@
         "Longitude": 137.3,
         "Magunitude": 6.3,
         "Depth": 10,
-        "MaxIntensity": "6",
+        "MaxIntensity": "6強",
         "Accuracy": {
             "Epicenter": "IPF 法（5 点以上）",
             "Depth": "IPF 法（5 点以上）",
@@ -375,7 +375,7 @@
         "Longitude": 137.3,
         "Magunitude": 6.3,
         "Depth": 10,
-        "MaxIntensity": "6",
+        "MaxIntensity": "6強",
         "Accuracy": {
             "Epicenter": "IPF 法（5 点以上）",
             "Depth": "IPF 法（5 点以上）",
@@ -411,7 +411,7 @@
         "Longitude": 137.4,
         "Magunitude": 6.3,
         "Depth": 10,
-        "MaxIntensity": "6",
+        "MaxIntensity": "6強",
         "Accuracy": {
             "Epicenter": "IPF 法（5 点以上）",
             "Depth": "IPF 法（5 点以上）",
@@ -447,7 +447,7 @@
         "Longitude": 137.3,
         "Magunitude": 6.5,
         "Depth": 20,
-        "MaxIntensity": "6",
+        "MaxIntensity": "6強",
         "Accuracy": {
             "Epicenter": "IPF 法（5 点以上）",
             "Depth": "IPF 法（5 点以上）",
@@ -483,7 +483,7 @@
         "Longitude": 137.3,
         "Magunitude": 6.2,
         "Depth": 10,
-        "MaxIntensity": "6",
+        "MaxIntensity": "6強",
         "Accuracy": {
             "Epicenter": "IPF 法（5 点以上）",
             "Depth": "IPF 法（5 点以上）",
@@ -519,7 +519,7 @@
         "Longitude": 137.3,
         "Magunitude": 6.2,
         "Depth": 10,
-        "MaxIntensity": "6",
+        "MaxIntensity": "6強",
         "Accuracy": {
             "Epicenter": "IPF 法（5 点以上）",
             "Depth": "IPF 法（5 点以上）",
@@ -555,7 +555,7 @@
         "Longitude": 137.3,
         "Magunitude": 6.2,
         "Depth": 20,
-        "MaxIntensity": "6",
+        "MaxIntensity": "6強",
         "Accuracy": {
             "Epicenter": "IPF 法（5 点以上）",
             "Depth": "IPF 法（5 点以上）",
@@ -591,7 +591,7 @@
         "Longitude": 137.3,
         "Magunitude": 6.2,
         "Depth": 20,
-        "MaxIntensity": "6",
+        "MaxIntensity": "6強",
         "Accuracy": {
             "Epicenter": "IPF 法（5 点以上）",
             "Depth": "IPF 法（5 点以上）",
@@ -627,7 +627,7 @@
         "Longitude": 137.3,
         "Magunitude": 6.2,
         "Depth": 20,
-        "MaxIntensity": "6",
+        "MaxIntensity": "6強",
         "Accuracy": {
             "Epicenter": "IPF 法（5 点以上）",
             "Depth": "IPF 法（5 点以上）",
@@ -663,7 +663,7 @@
         "Longitude": 137.3,
         "Magunitude": 6.2,
         "Depth": 20,
-        "MaxIntensity": "6",
+        "MaxIntensity": "6強",
         "Accuracy": {
             "Epicenter": "IPF 法（5 点以上）",
             "Depth": "IPF 法（5 点以上）",
@@ -699,7 +699,7 @@
         "Longitude": 137.3,
         "Magunitude": 6.2,
         "Depth": 20,
-        "MaxIntensity": "6",
+        "MaxIntensity": "6強",
         "Accuracy": {
             "Epicenter": "IPF 法（5 点以上）",
             "Depth": "IPF 法（5 点以上）",
