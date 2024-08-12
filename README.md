@@ -48,6 +48,9 @@ python bot.py
 
 ## 情報送信条件
 ### 使用方法
+```env
+ForecastWarning=<Forecast,Warning,All>
+```
 
 ```Forecast```、```Warning```、```All```から一つ選択
 
