@@ -327,7 +327,7 @@ async def process_eew_data(data, is_test=False):
     warn_area = data.get('WarnArea', [])
     chiiki_list = [area.get('Chiiki', '不明') for area in warn_area]
     chiiki = ', '.join(chiiki_list) if chiiki_list else '発表なし'
-    magnitude = data.get('Magnitude', '不明')
+    magnitude = data.get('Magunitude', '不明')
     formatted_mag = "{:.1f}".format(float(magnitude)) if magnitude != '不明' else '不明'
     max_intensity = data.get('MaxIntensity', '不明')
     ac_epicenter = data.get('Accuracy', {}).get('Epicenter', '不明')
