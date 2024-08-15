@@ -361,9 +361,10 @@ async def process_eew_data(data, is_test=False):
         image = 'shindo6s.png'
     elif max_intensity == '7':
         image = 'shindo7.png'
+    elif int(depth) >= 150:
+        image = 'deep.png'
     else:
         image = 'unknown.png'
-
 
     title_type = "警報" if data.get('isWarn', False) else "予報"
     title = f"{'**テストデータです！**' if is_test else ''}緊急地震速報（{title_type}）第{report_number}報"

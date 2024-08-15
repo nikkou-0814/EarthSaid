@@ -14,7 +14,7 @@
         "Latitude": 37.4,
         "Longitude": 137.4,
         "Magunitude": 0,
-        "Depth": 10,
+        "Depth": 150,
         "MaxIntensity": "5弱",
         "Accuracy": {
             "Epicenter": "P波/S波レベル越え",
