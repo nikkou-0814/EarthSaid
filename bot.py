@@ -33,7 +33,7 @@ with open('testdata.json', 'r', encoding='utf-8') as f:
 async def on_ready():
     print("Bot起動完了")
     await tree.sync()
-    await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, NET速度計測中"))
+    await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, Ping計測中"))
     client.loop.create_task(fetch_wolfx())
     client.loop.create_task(fetch_p2pquake())
     client.loop.create_task(update_status())
@@ -41,15 +41,12 @@ async def on_ready():
 async def update_status():
     while True:
         cpu_usage = psutil.cpu_percent()
+        ping = round(client.latency * 1000)
 
-        st = speedtest.Speedtest()
-        st.get_best_server()
-        upload_speed = int(st.upload() / 10**6)
-
-        status_message = f"CPU: {cpu_usage}% | NET: {upload_speed}Mbps"
+        status_message = f"CPU: {cpu_usage}% | Ping: {ping}ms"
         await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=status_message))
 
-        await asyncio.sleep(300)
+        await asyncio.sleep(10)
 
 #WebSocket connection
 async def fetch_p2pquake():
@@ -85,7 +82,7 @@ async def fetch_p2pquake():
             await client.change_presence(status=discord.Status.idle, activity=discord.CustomActivity(name="P2PQuake WebSocket Connecting"))
             await asyncio.sleep(5)
             status_p2pquake = "接続中"
-            await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=VER))
+            await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, Ping計測中"))
 
 async def fetch_wolfx(data=None):
     global status_wolfx
@@ -120,25 +117,32 @@ async def fetch_wolfx(data=None):
                     await client.change_presence(status=discord.Status.idle, activity=discord.CustomActivity(name="Wolfx WebSocket Connecting"))
                     await asyncio.sleep(5)
                     status_wolfx = "接続中"
-                    await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=VER))
+                    await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, Ping計測中"))
 
 
 
 #P2PQuake info
 async def process_p2pquake_info(data):
-    quaketype = data['issue']['type']
-    source = data['issue']['source']
-    details = data['earthquake']
-    place = details['hypocenter']['name']
-    magnitude = details['hypocenter']['magnitude']
-    formatted_mag = "{:.1f}".format(magnitude)
-    depth = details['hypocenter']['depth']
-    depth = "ごく浅い" if depth == 0 else f"{depth}km"
-    max_intensity = details['maxScale']
-    domestic_tsunami = details.get("domesticTsunami", "情報なし")
-    occurrence_time = details.get("time")
-    occurrence_time_obj = datetime.strptime(occurrence_time, "%Y/%m/%d %H:%M:%S")
-    formatted_time = occurrence_time_obj.strftime("%d日%H時%M分")
+    quaketype = data.get('issue', {}).get('type', '不明')
+    source = data.get('issue', {}).get('source', '不明')
+    details = data.get('earthquake', {})
+    place = details.get('hypocenter', {}).get('name', '不明')
+    magnitude = details.get('hypocenter', {}).get('magnitude', '不明')
+    formatted_mag = "{:.1f}".format(magnitude) if isinstance(magnitude, (int, float)) else '不明'
+    depth = details.get('hypocenter', {}).get('depth', '不明')
+    depth = "ごく浅い" if depth == 0 else (f"{depth}km" if depth != '不明' else '不明')
+    max_intensity = details.get('maxScale', '不明')
+    domestic_tsunami = details.get('domesticTsunami', '情報なし')
+    occurrence_time = details.get('time', '不明')
+    formatted_time = '不明'
+
+    if occurrence_time != '不明':
+        try:
+            occurrence_time_obj = datetime.strptime(occurrence_time, "%Y/%m/%d %H:%M:%S")
+            formatted_time = occurrence_time_obj.strftime("%d日%H時%M分")
+        except ValueError:
+            formatted_time = '不明'
+
     tsunami_text = (
         "この地震による津波の心配はありません。" if domestic_tsunami == "None" else
         "この地震による津波の有無は不明です。" if domestic_tsunami == "Unknown" else
@@ -201,9 +205,9 @@ async def process_p2pquake_info(data):
 
         channel = client.get_channel(channel_id)
         await channel.send(embed=embed, file=file)
-        await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"震度速報: {place}で最大震度{formatted_intensity}を観測"))
-        await asyncio.sleep(5)
-        await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=VER))
+        await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"震度速報: 最大震度{formatted_intensity}を観測する地震がありました"))
+        await asyncio.sleep(20)
+        await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, Ping計測中"))
 
     elif quaketype == "Destination":  # 震源情報
         embed = discord.Embed(title="🌍 震源情報", description=f"{formatted_time}頃、地震がありました。\n**{tsunami_text}**", color=color)
@@ -215,8 +219,8 @@ async def process_p2pquake_info(data):
         channel = client.get_channel(channel_id)
         await channel.send(embed=embed)
         await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"震源情報: {place}で地震がありました"))
-        await asyncio.sleep(5)
-        await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=VER))
+        await asyncio.sleep(20)
+        await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, Ping計測中"))
 
     elif quaketype == "DetailScale":  # 地震情報
         embed = discord.Embed(title="🌍 地震情報", description=f"{formatted_time}頃、\n{place}で**最大震度{formatted_intensity}**の地震がありました。\n**{tsunami_text}**", color=color)
@@ -231,8 +235,8 @@ async def process_p2pquake_info(data):
         channel = client.get_channel(channel_id)
         await channel.send(embed=embed, file=file)
         await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"地震情報: {place}で最大震度{formatted_intensity}の地震がありました"))
-        await asyncio.sleep(5)
-        await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=VER))
+        await asyncio.sleep(20)
+        await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, Ping計測中"))
         
 
     elif quaketype == "Foreign":  # 遠地地震情報
@@ -249,8 +253,8 @@ async def process_p2pquake_info(data):
         channel = client.get_channel(channel_id)
         await channel.send(embed=embed, file=file)
         await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"遠地地震: {place}, M{formatted_mag}"))
-        await asyncio.sleep(5)
-        await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=VER))
+        await asyncio.sleep(20)
+        await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, Ping計測中"))
 
     elif quaketype == "Other":  # その他の地震情報
         embed = discord.Embed(title="🌍 地震情報(その他)", description=f"{formatted_time}頃、\n地震がありました。", color=color)
@@ -267,25 +271,30 @@ async def process_p2pquake_info(data):
 
 #P2PQuake eew
 async def process_p2pquake_eew(data):
-    hypocenter_name = data['earthquake']['hypocenter']['name']
-    magnitude = data['earthquake']['hypocenter']['magnitude']
-    depth = data['earthquake']['hypocenter']['depth']
+    hypocenter_name = data.get('earthquake', {}).get('hypocenter', {}).get('name', '不明')
+    magnitude = data.get('earthquake', {}).get('hypocenter', {}).get('magnitude', '不明')
+    depth = data.get('earthquake', {}).get('hypocenter', {}).get('depth', '不明')
+
     areas_info = []
-    for area in data['areas']:
+    for area in data.get('areas', []):
+        arrival_time = area.get('arrivalTime', '不明')
         try:
-            arrival_time_obj = datetime.strptime(area['arrivalTime'], "%Y/%m/%d %H:%M:%S")
+            arrival_time_obj = datetime.strptime(arrival_time, "%Y/%m/%d %H:%M:%S")
             formatted_arrival_time = arrival_time_obj.strftime("%d日%H時%M分")
         except ValueError:
             formatted_arrival_time = '不明'
-        areas_info.append(f"{area['name']}（{formatted_arrival_time}）")
+        areas_info.append(f"{area.get('name', '不明')}（{formatted_arrival_time}）")
+
     areas_text = "\n".join(areas_info)
 
-    try:
-        origin_time_str = data['earthquake']['originTime']
-        origin_time_obj = datetime.strptime(origin_time_str, "%Y/%m/%d %H:%M:%S")
-        formatted_origin_time = origin_time_obj.strftime("%d日%H時%M分")
-    except ValueError:
-        formatted_origin_time = '不明'
+    origin_time_str = data.get('earthquake', {}).get('originTime', '不明')
+    formatted_origin_time = '不明'
+    if origin_time_str != '不明':
+        try:
+            origin_time_obj = datetime.strptime(origin_time_str, "%Y/%m/%d %H:%M:%S")
+            formatted_origin_time = origin_time_obj.strftime("%d日%H時%M分")
+        except ValueError:
+            formatted_origin_time = '不明'
 
     embed = discord.Embed(title="緊急地震速報🚨", description="緊急地震速報です。強い揺れに警戒して下さい。\n緊急地震速報が発令された地域では、震度5弱以上の揺れが来るかもしれません。\n落ち着いて、身の安全を図ってください。", color=0xff0000)
     embed.add_field(name="発震時間", value=formatted_origin_time, inline=True)
@@ -316,15 +325,17 @@ async def process_eew_data(data, is_test=False):
     is_cancel = data.get('isCancel', False)
     is_assumption = data.get('isAssumption', False)
     warn_area = data.get('WarnArea', [])
-    chiiki_list = [area['Chiiki'] for area in warn_area]
+    chiiki_list = [area.get('Chiiki', '不明') for area in warn_area]
     chiiki = ', '.join(chiiki_list) if chiiki_list else '発表なし'
-    magnitude = data.get('Magunitude', '不明')
+    magnitude = data.get('Magnitude', '不明')
     formatted_mag = "{:.1f}".format(float(magnitude)) if magnitude != '不明' else '不明'
     max_intensity = data.get('MaxIntensity', '不明')
-    ac_epicenter = data['Accuracy']['Epicenter']
-    ac_depth = data['Accuracy']['Depth']
-    ac_magnitude = data['Accuracy']['Magnitude']
+    ac_epicenter = data.get('Accuracy', {}).get('Epicenter', '不明')
+    ac_depth = data.get('Accuracy', {}).get('Depth', '不明')
+    ac_magnitude = data.get('Accuracy', {}).get('Magnitude', '不明')
     origin_time_str = data.get('OriginTime', '不明')
+    hypocenter = data.get('Hypocenter', '不明')
+    depth = data.get('Depth', '不明')
     
     try:
         origin_time_obj = datetime.strptime(origin_time_str, "%Y/%m/%d %H:%M:%S")
@@ -356,6 +367,8 @@ async def process_eew_data(data, is_test=False):
 
     title_type = "警報" if data.get('isWarn', False) else "予報"
     title = f"{'**テストデータです！**' if is_test else ''}緊急地震速報（{title_type}）第{report_number}報"
+    description = f"{formatted_origin_time}頃{hypocenter}で地震、推定最大震度{max_intensity}"
+    color = 0xff0000 if data.get('isWarn', False) else 0xffd700
     if is_final:
         title += "【最終報】"
     if is_cancel:
@@ -363,13 +376,10 @@ async def process_eew_data(data, is_test=False):
     if is_assumption:
         title += " 仮定震源要素"
 
-    color = 0xff0000 if data.get('isWarn', False) else 0xffd700
-    embed = discord.Embed(title=title, color=color)
-    embed.add_field(name="予想発震時間", value=formatted_origin_time, inline=True)
-    embed.add_field(name="予想最大震度", value=max_intensity, inline=True)
-    embed.add_field(name="推定震源地", value=data['Hypocenter'], inline=True)
+    embed = discord.Embed(title=title, description=description, color=color)
+    embed.add_field(name="推定震源地", value=hypocenter, inline=True)
     embed.add_field(name="マグニチュード", value=f"M{formatted_mag}", inline=True)
-    embed.add_field(name="深さ", value=f"{data['Depth']}km", inline=True)
+    embed.add_field(name="深さ", value=f"{depth}km", inline=True)
     embed.add_field(name="震源の精度", value=ac_epicenter, inline=True)
     embed.add_field(name="深さの精度", value=ac_depth, inline=True)
     embed.add_field(name="マグニチュードの精度", value=ac_magnitude, inline=True)
@@ -384,8 +394,8 @@ async def process_eew_data(data, is_test=False):
     await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"{data['Hypocenter']}最大震度{max_intensity}の地震"))
     if is_final:
         await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"{data['Hypocenter']}最大震度{max_intensity}の地震"))
-        await asyncio.sleep(10)
-        await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=VER))
+        await asyncio.sleep(20)
+        await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, Ping計測中"))
 
 
 
