@@ -99,7 +99,7 @@ ForecastWarning=<Forecast,Warning,All>
 | **warnAreaArrive**      | 地震波が到達したかどうか             | NO                      |
 | **isSea**               | 海域で発生した地震かどうか           | NO                      |
 | **isTraining**          | 訓練用の速報かどうか                 | NO                     |
-| **isAssumption**        | 推定震源（PLUM法、レベル法、IPF法）かどうか | YES                |
+| **isAssumption**        | 仮定震源かどうか（PLUM法、レベル法、IPF法） | YES                |
 | **isWarn**              | 警報かどうか                         | YES                   |
 | **isFinal**             | 最終報かどうか                       | YES                   |
 | **isCancel**            | 取消報かどうか                       | YES                   |
