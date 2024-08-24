@@ -36,18 +36,20 @@ async def on_ready():
     await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, Ping計測中"))
     client.loop.create_task(fetch_wolfx())
     client.loop.create_task(fetch_p2pquake())
-    client.loop.create_task(update_status())
-
-async def update_status():
     while True:
         cpu_usage = psutil.cpu_percent()
-        ping = round(client.latency * 1000)
+
+        latency = client.latency * 1000
+        if latency == float('inf'):
+            ping = "N/A"
+        else:
+            ping = round(latency)
 
         status_message = f"CPU: {cpu_usage}% | Ping: {ping}ms"
         await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=status_message))
 
         await asyncio.sleep(10)
-
+    
 #WebSocket connection
 async def fetch_p2pquake():
     global status_p2pquake
