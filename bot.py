@@ -303,7 +303,7 @@ async def process_p2pquake_eew(data):
     embed.add_field(name="震源地", value=hypocenter_name, inline=True)
     embed.add_field(name="マグニチュード", value=f"M{magnitude}", inline=True)
     embed.add_field(name="深さ", value=f"{depth}km", inline=True)
-    embed.add_field(name="発表地域", value=areas_text if areas_text else "発表なし", inline=False)
+    embed.add_field(name="発表地域、到達予想時刻", value=areas_text if areas_text else "発表なし", inline=False)
     embed.set_footer(text=f"{client.user.name}・気象庁 | Version {VER}", icon_url=f"{client.user.avatar}")
 
     channel = client.get_channel(channel_id)
