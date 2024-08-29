@@ -36,7 +36,10 @@ async def on_ready():
     await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, Ping計測中"))
     client.loop.create_task(fetch_wolfx())
     client.loop.create_task(fetch_p2pquake())
-    while True:
+    await change_bot_presence(client)
+
+async def change_bot_presence(client):
+    try:
         cpu_usage = psutil.cpu_percent()
 
         latency = client.latency * 1000
@@ -47,8 +50,12 @@ async def on_ready():
 
         status_message = f"CPU: {cpu_usage}% | Ping: {ping}ms"
         await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=status_message))
-
-        await asyncio.sleep(10)
+    except (discord.ConnectionClosed, ConnectionResetError) as e:
+        print(f"Encountered a connection issue: {e}. Attempting to reconnect...")
+        await asyncio.sleep(5)
+        await change_bot_presence(client)
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
 
 #WebSocket connection
 async def fetch_p2pquake():
