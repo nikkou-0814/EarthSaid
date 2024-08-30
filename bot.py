@@ -33,7 +33,7 @@ with open('testdata.json', 'r', encoding='utf-8') as f:
 async def on_ready():
     print("Bot起動完了")
     await tree.sync()
-    await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, Ping計測中"))
+    await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, RAM, Ping計測中"))
     client.loop.create_task(fetch_wolfx())
     client.loop.create_task(fetch_p2pquake())
     await change_bot_presence(client)
@@ -42,6 +42,8 @@ async def change_bot_presence(client):
     while True:
         try:
             cpu_usage = psutil.cpu_percent()
+            memory_info = psutil.virtual_memory()
+            memory_usage = memory_info.percent
 
             latency = client.latency * 1000
             if latency == float('inf'):
@@ -49,7 +51,7 @@ async def change_bot_presence(client):
             else:
                 ping = round(latency)
 
-            status_message = f"CPU: {cpu_usage}% | Ping: {ping}ms"
+            status_message = f"CPU: {cpu_usage}% | RAM: {memory_usage}% | Ping: {ping}ms"
             await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=status_message))
             await asyncio.sleep(10)
         except (discord.ConnectionClosed, ConnectionResetError) as e:
