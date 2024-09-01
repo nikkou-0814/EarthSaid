@@ -98,7 +98,7 @@ async def fetch_p2pquake():
             await client.change_presence(status=discord.Status.idle, activity=discord.CustomActivity(name="P2PQuake WebSocket Connecting"))
             await asyncio.sleep(5)
             status_p2pquake = "接続中"
-            await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, Ping計測中"))
+            await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, RAM, Ping計測中"))
 
 async def fetch_wolfx(data=None):
     global status_wolfx
@@ -133,7 +133,7 @@ async def fetch_wolfx(data=None):
                     await client.change_presence(status=discord.Status.idle, activity=discord.CustomActivity(name="Wolfx WebSocket Connecting"))
                     await asyncio.sleep(5)
                     status_wolfx = "接続中"
-                    await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, Ping計測中"))
+                    await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, RAM, Ping計測中"))
 
 #P2PQuake info
 async def process_p2pquake_info(data):
@@ -212,45 +212,30 @@ async def process_p2pquake_info(data):
         points_info = "\n".join([f"{point['addr']}: 震度{int(point['scale'] / 10)}" for point in data['points']])
         embed = discord.Embed(title="🌍 震度速報", description=f"{formatted_time}頃、\n**最大震度{formatted_intensity}**を観測する地震が発生しました。\n**{tsunami_text}** \n今後の情報に注意してください。", color=color)
         embed.add_field(name="震度情報", value=points_info, inline=False)
-        embed.set_footer(text=f"{client.user.name}・{source} | Version {VER}", icon_url=f"{client.user.avatar}")
 
-        file = discord.File(f"info/{image}", filename=image)
-        embed.set_thumbnail(url=f"attachment://{image}")
-
-        channel = client.get_channel(channel_id)
-        await channel.send(embed=embed, file=file)
         await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"震度速報: 最大震度{formatted_intensity}を観測する地震がありました"))
         await asyncio.sleep(20)
-        await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, Ping計測中"))
+        await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, RAM, Ping計測中"))
 
     elif quaketype == "Destination":  # 震源情報
         embed = discord.Embed(title="🌍 震源情報", description=f"{formatted_time}頃、地震がありました。\n**{tsunami_text}**", color=color)
         embed.add_field(name="震源", value=place, inline=True)
         embed.add_field(name="マグニチュード", value=f"M{formatted_mag}", inline=True)
         embed.add_field(name="深さ", value=depth, inline=True)
-        embed.set_footer(text=f"{client.user.name}・{source} | Version {VER}", icon_url=f"{client.user.avatar}")
 
-        channel = client.get_channel(channel_id)
-        await channel.send(embed=embed)
         await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"震源情報: {place}で地震がありました"))
         await asyncio.sleep(20)
-        await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, Ping計測中"))
+        await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, RAM, Ping計測中"))
 
     elif quaketype == "DetailScale":  # 地震情報
         embed = discord.Embed(title="🌍 地震情報", description=f"{formatted_time}頃、\n{place}で**最大震度{formatted_intensity}**の地震がありました。\n**{tsunami_text}**", color=color)
         embed.add_field(name="震央", value=place, inline=True)
         embed.add_field(name="マグニチュード", value=f"M{formatted_mag}", inline=True)
         embed.add_field(name="深さ", value=depth, inline=True)
-        embed.set_footer(text=f"{client.user.name}・{source} | Version {VER}", icon_url=f"{client.user.avatar}")
 
-        file = discord.File(f"info/{image}", filename=image)
-        embed.set_thumbnail(url=f"attachment://{image}")
-
-        channel = client.get_channel(channel_id)
-        await channel.send(embed=embed, file=file)
         await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"地震情報: {place}で最大震度{formatted_intensity}の地震がありました"))
         await asyncio.sleep(20)
-        await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, Ping計測中"))
+        await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, RAM, Ping計測中"))
         
 
     elif quaketype == "Foreign":  # 遠地地震情報
@@ -259,27 +244,22 @@ async def process_p2pquake_info(data):
         embed.add_field(name="震源", value=place, inline=True)
         embed.add_field(name="マグニチュード", value=f"M{formatted_mag}", inline=True)
         embed.add_field(name="深さ", value=depth, inline=True)
-        embed.set_footer(text=f"{client.user.name}・{source} | Version {VER}", icon_url=f"{client.user.avatar}")
-
-        file = discord.File(f"info/{image}", filename=image)
-        embed.set_thumbnail(url=f"attachment://{image}")
-
-        channel = client.get_channel(channel_id)
-        await channel.send(embed=embed, file=file)
+        
         await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"遠地地震: {place}, M{formatted_mag}"))
         await asyncio.sleep(20)
-        await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, Ping計測中"))
+        await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, RAM, Ping計測中"))
 
     elif quaketype == "Other":  # その他の地震情報
         embed = discord.Embed(title="🌍 地震情報(その他)", description=f"{formatted_time}頃、\n地震がありました。", color=color)
         embed.add_field(name="data", value=data, inline=True)
-        embed.set_footer(text=f"{client.user.name}・{source} | Version {VER}", icon_url=f"{client.user.avatar}")
+        
+    channel = client.get_channel(channel_id)
+    file = discord.File(f"info/{image}", filename=image)
 
-        file = discord.File(f"info/{image}", filename=image)
-        embed.set_thumbnail(url=f"attachment://{image}")
+    embed.set_footer(text=f"{source} | Version {VER}")
+    embed.set_thumbnail(url=f"attachment://{image}")
 
-        channel = client.get_channel(channel_id)
-        await channel.send(embed=embed, file=file)
+    await channel.send(embed=embed, file=file)
 
 #P2PQuake eew
 async def process_p2pquake_eew(data):
@@ -314,7 +294,7 @@ async def process_p2pquake_eew(data):
     embed.add_field(name="マグニチュード", value=f"M{magnitude}", inline=True)
     embed.add_field(name="深さ", value=f"{depth}km", inline=True)
     embed.add_field(name="発表地域、到達予想時刻", value=areas_text if areas_text else "発表なし", inline=False)
-    embed.set_footer(text=f"{client.user.name}・気象庁 | Version {VER}", icon_url=f"{client.user.avatar}")
+    embed.set_footer(text=f"気象庁 | Version {VER}")
 
     channel = client.get_channel(channel_id)
     await channel.send(embed=embed)
@@ -353,7 +333,7 @@ async def process_p2pquake_tsunami(data):
         embed.add_field(name="発表時間", value=formatted_issue_time, inline=True)
         embed.add_field(name="発表されたエリア", value=areas_text if areas_text else "エリアなし", inline=False)
 
-    embed.set_footer(text=f"{client.user.name}・気象庁 | Version {VER}", icon_url=client.user.avatar)
+    embed.set_footer(text=f"気象庁 | Version {VER}")
 
     channel = client.get_channel(channel_id)
     await channel.send(embed=embed)
@@ -434,7 +414,7 @@ async def process_eew_data(data, is_test=False):
     embed.add_field(name="深さの精度", value=ac_depth, inline=True)
     embed.add_field(name="マグニチュードの精度", value=ac_magnitude, inline=True)
     embed.add_field(name="警報区域", value=chiiki, inline=False)
-    embed.set_footer(text=f"{client.user.name}・気象庁 | Version {VER}", icon_url=f"{client.user.avatar}")
+    embed.set_footer(text=f"気象庁 | Version {VER}")
 
     file = discord.File(f"eew/{image}", filename=image)
     embed.set_thumbnail(url=f"attachment://{image}")
@@ -445,7 +425,7 @@ async def process_eew_data(data, is_test=False):
     if is_final:
         await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"{data['Hypocenter']}最大震度{max_intensity}の地震"))
         await asyncio.sleep(20)
-        await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, Ping計測中"))
+        await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, RAM, Ping計測中"))
 
 @tree.command(name="testdata", description="eewのテストをします")
 async def testdata(interaction: discord.Interaction):
@@ -488,6 +468,5 @@ async def status(interaction: discord.Interaction):
     embed_2.set_footer(text=f"2/2")
 
     await interaction.followup.send(embed=embed_2)
-
 
 client.run(os.getenv('TOKEN'))
