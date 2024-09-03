@@ -55,10 +55,10 @@ async def change_bot_presence(client):
             await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=status_message))
             await asyncio.sleep(10)
         except (discord.ConnectionClosed, ConnectionResetError) as e:
-            print(f"Encountered a connection issue: {e}. Attempting to reconnect...")
+            print(f"ステータス更新中に接続エラーが発生しました: {e}")
             await asyncio.sleep(5)
         except Exception as e:
-            print(f"An unexpected error occurred: {e}")
+            print(f"予期しないエラーが発生しました: {e}")
 
 #WebSocket connection
 async def fetch_p2pquake():
@@ -438,7 +438,7 @@ async def testdata(interaction: discord.Interaction):
 async def status(interaction: discord.Interaction):
     await interaction.response.defer()
 
-    embed_1 = discord.Embed(title=f"ステータス", color=0x00ff00)
+    embed_1 = discord.Embed(title=f"ステータス", description="基本情報", color=0x00ff00)
     embed_1.add_field(name="CPU使用率", value=f"{psutil.cpu_percent()}%", inline=True)
     embed_1.add_field(name="メモリ使用量", value=f"{psutil.virtual_memory().percent}%", inline=True)
     embed_1.add_field(name="Ping", value=f"{round(client.latency * 1000)}ms", inline=True)
@@ -459,9 +459,9 @@ async def status(interaction: discord.Interaction):
         download_speed = "N/A"
         upload_speed = "N/A"
         server_info = "N/A"
-        print(f"Error speedtest: {e}")
+        print(f"スピードテストに失敗しました: {e}")
 
-    embed_2 = discord.Embed(title=f"インターネット速度", color=0x00ff00)
+    embed_2 = discord.Embed(title=f"インターネット速度", description="インターネット情報", color=0x00ff00)
     embed_2.add_field(name="サーバー", value=server_info, inline=True)
     embed_2.add_field(name="ダウンロード", value=f"{download_speed}Mbps", inline=True)
     embed_2.add_field(name="アップロード", value=f"{upload_speed}Mbps", inline=True)
