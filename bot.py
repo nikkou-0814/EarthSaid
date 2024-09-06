@@ -18,7 +18,7 @@ client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
 
 channel_id = int(os.getenv('ChannelID'))
-VER = "alpha 0.1.1"
+VER = "alpha 0.1.2"
 
 status_p2pquake = "接続していません"
 status_wolfx = "接続していません"
