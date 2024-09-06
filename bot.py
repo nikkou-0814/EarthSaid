@@ -409,7 +409,7 @@ async def process_eew_data(data, is_test=False):
     if is_assumption:
         title += "【仮定震源要素】"
 
-    description += "\n**直ちに強い揺れに備えてください**" if deta.get('isWarn', False) else "\n**揺れに備えてください**"
+    description += "\n**直ちに強い揺れに備えてください**" if data.get('isWarn', False) else "\n**揺れに備えてください**"
 
     accuracy_conditions = [
         "P 波／S 波レベル超え、IPF 法（1 点）、または仮定震源要素",
