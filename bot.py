@@ -372,9 +372,7 @@ async def process_eew_data(data, is_test=False):
     except ValueError:
         formatted_origin_time = '不明'
 
-    if is_assumption and formatted_mag == "1.0":
-        image = 'single.png'
-    elif max_intensity == '1':
+    if max_intensity == '1':
         image = 'shindo1.png'
     elif max_intensity == '2':
         image = 'shindo2.png'
@@ -407,23 +405,15 @@ async def process_eew_data(data, is_test=False):
     if is_cancel:
         title += "【キャンセル】"
     if is_assumption:
-        title += "【仮定震源要素】"
+        title += "【仮定震源】"
 
     if max_intensity in ["6弱", "6強", "7"]:
-        description += "\n**緊急地震速報の特別警報です。身の安全を確保してください**"
+        description += "\n\n**緊急地震速報の特別警報です。身の安全を確保してください**"
     else:
-        description += "\n**強い揺れに警戒してください**" if data.get('isWarn', False) else "\n**揺れに備えてください**"
+        description += "\n\n**強い揺れに警戒してください**" if data.get('isWarn', False) else "\n\n**揺れに備えてください**"
 
-    accuracy_conditions = [
-        "P 波／S 波レベル超え、IPF 法（1 点）、または仮定震源要素",
-        "P 波／S 波レベル超え、または仮定震源要素"
-    ]
-
-    if (ac_epicenter in accuracy_conditions or ac_depth in accuracy_conditions or ac_magnitude in accuracy_conditions) and max_intensity not in ["不明", ""]:
-        description += "\n\nリアルタイム震度から直接推定された震度が発表されています"
-
-    if is_assumption and formatted_mag == "1.0":
-        description += "\n\n使用されている観測点の数が少ないため震度推定がない場合があります"
+    if int(depth) >= 150:
+        description += "\n\n震源が深いため、震央から離れた場所で揺れが大きくなることがあります"
 
     if is_assumption:
         description += "\n\n**以下の情報は仮に割り振られた情報であり、地震学的な意味を持ちません**"
