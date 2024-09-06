@@ -396,7 +396,7 @@ async def process_eew_data(data, is_test=False):
         image = 'unknown.png'
 
     title_type = "警報" if data.get('isWarn', False) else "予報"
-    title = f"{'**テストデータです！**' if is_test else ''}⚠️緊急地震速報（{title_type}）第{report_number}報"
+    title = f"{'**テストデータです！**' if is_test else ''}{"🚨" if data.get('isWarn', False) else "⚠️"}緊急地震速報({title_type}) 第{report_number}報"
     description = f"**{formatted_origin_time}頃{hypocenter}で地震、推定最大震度{max_intensity}**"
     color = 0xff0000 if data.get('isWarn', False) else 0xffd700
     
@@ -428,7 +428,8 @@ async def process_eew_data(data, is_test=False):
     embed.add_field(name="警報区域", value=chiiki, inline=False)
     embed.set_footer(text=f"気象庁 | Version {VER}")
 
-    file = discord.File(f"eew/{image}", filename=image)
+    file_path = "eew/warning" if data.get('isWarn', False) else "eew/forecast"
+    file = discord.File(f"{file_path}/{image}", filename=image)
     embed.set_thumbnail(url=f"attachment://{image}")
 
     channel = client.get_channel(channel_id)
