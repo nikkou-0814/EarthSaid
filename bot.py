@@ -18,7 +18,7 @@ client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
 
 channel_id = int(os.getenv('ChannelID'))
-VER = "beta 0.1.0"
+VER = "alpha 0.1.1"
 
 status_p2pquake = "接続していません"
 status_wolfx = "接続していません"
@@ -372,7 +372,9 @@ async def process_eew_data(data, is_test=False):
     except ValueError:
         formatted_origin_time = '不明'
 
-    if max_intensity == '1':
+    if is_assumption and formatted_mag == "1.0":
+        image = 'single.png'
+    elif max_intensity == '1':
         image = 'shindo1.png'
     elif max_intensity == '2':
         image = 'shindo2.png'
@@ -396,15 +398,32 @@ async def process_eew_data(data, is_test=False):
         image = 'unknown.png'
 
     title_type = "警報" if data.get('isWarn', False) else "予報"
-    title = f"{'**テストデータです！**' if is_test else ''}緊急地震速報（{title_type}）第{report_number}報"
-    description = f"{formatted_origin_time}頃{hypocenter}で地震、推定最大震度{max_intensity}"
+    title = f"{'**テストデータです！**' if is_test else ''}⚠️緊急地震速報（{title_type}）第{report_number}報"
+    description = f"**{formatted_origin_time}頃{hypocenter}で地震、推定最大震度{max_intensity}**"
     color = 0xff0000 if data.get('isWarn', False) else 0xffd700
+    
     if is_final:
         title += "【最終報】"
     if is_cancel:
         title += "【キャンセル】"
     if is_assumption:
-        title += " 仮定震源要素"
+        title += "【仮定震源要素】"
+
+    description += "\n**直ちに強い揺れに備えてください**" if deta.get('isWarn', False) else "\n**揺れに備えてください**"
+
+    accuracy_conditions = [
+        "P 波／S 波レベル超え、IPF 法（1 点）、または仮定震源要素",
+        "P 波／S 波レベル超え、または仮定震源要素"
+    ]
+
+    if (ac_epicenter in accuracy_conditions or ac_depth in accuracy_conditions or ac_magnitude in accuracy_conditions) and max_intensity not in ["不明", ""]:
+        description += "\n\nリアルタイム震度から直接推定された震度が発表されています"
+
+    if is_assumption and formatted_mag == "1.0":
+        description += "\n\n使用されている観測点の数が少ないため震度推定がない場合があります"
+
+    if is_assumption:
+        description += "\n\n**以下の情報は仮に割り振られた情報であり、地震学的な意味を持ちません**"
 
     embed = discord.Embed(title=title, description=description, color=color)
     embed.add_field(name="推定震源地", value=hypocenter, inline=True)

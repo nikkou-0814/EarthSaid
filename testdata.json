@@ -14,12 +14,12 @@
         "Latitude": 37.4,
         "Longitude": 137.4,
         "Magunitude": 0,
-        "Depth": 150,
+        "Depth": 10,
         "MaxIntensity": "5弱",
         "Accuracy": {
-            "Epicenter": "P波/S波レベル越え",
-            "Depth": "P波/S波レベル越え",
-            "Magnitude": "P波/S波レベル越え"
+            "Epicenter": "P 波／S 波レベル超え、IPF 法（1 点）、または仮定震源要素",
+            "Depth": "P 波／S 波レベル超え、IPF 法（1 点）、または仮定震源要素",
+            "Magnitude": "P 波／S 波レベル超え、または仮定震源要素"
         },
         "MaxIntChange": {
             "String": "ほとんど変化なし",
