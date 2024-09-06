@@ -18,7 +18,7 @@ client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
 
 channel_id = int(os.getenv('ChannelID'))
-VER = "alpha 0.1.2"
+VER = "alpha 0.1.3"
 
 status_p2pquake = "接続していません"
 status_wolfx = "接続していません"
@@ -461,6 +461,8 @@ async def status(interaction: discord.Interaction):
 
     await interaction.followup.send(embed=embed_1)
 
+    speedtest_message = await interaction.followup.send("インターネット速度を計測中です...")
+
     try:
         st = speedtest.Speedtest()
         st.get_best_server()
@@ -480,6 +482,6 @@ async def status(interaction: discord.Interaction):
     embed_2.add_field(name="アップロード", value=f"{upload_speed}Mbps", inline=True)
     embed_2.set_footer(text=f"2/2")
 
-    await interaction.followup.send(embed=embed_2)
+    await speedtest_message.edit(content=None, embed=embed_2)
 
 client.run(os.getenv('TOKEN'))
