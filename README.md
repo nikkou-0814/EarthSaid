@@ -3,7 +3,7 @@
 <div style="text-align: center;">
     <img src="screenshot.png" alt="Kyoshin Report BOT Screenshot" style="max-width: 100%; height: auto;">
 </div>
-※実際のものではありません
+※現在のものではありません
 
 > [!CAUTION]
 >## 始める前に
