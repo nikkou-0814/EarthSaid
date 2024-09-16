@@ -252,14 +252,17 @@ async def process_p2pquake_info(data):
     elif quaketype == "Other":  # その他の地震情報
         embed = discord.Embed(title="🌍 地震情報(その他)", description=f"{formatted_time}頃、\n地震がありました。", color=color)
         embed.add_field(name="data", value=data, inline=True)
-        
+    
     channel = client.get_channel(channel_id)
-    file = discord.File(f"info/{image}", filename=image)
-
     embed.set_footer(text=f"{source} | Version {VER}")
-    embed.set_thumbnail(url=f"attachment://{image}")
 
-    await channel.send(embed=embed, file=file)
+    if quaketype != "Destination" and quaketype != "Other":
+        file = discord.File(f"info/{image}", filename=image)
+        embed.set_thumbnail(url=f"attachment://{image}")
+        await channel.send(embed=embed, file=file)
+    else:
+        await channel.send(embed=embed)
+
 
 #P2PQuake eew
 async def process_p2pquake_eew(data):
