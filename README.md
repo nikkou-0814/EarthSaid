@@ -1,17 +1,15 @@
-# Earth Said BOT(alpha版)
+# Earth Said BOT
 
 <div style="text-align: center;">
     <img src="screenshot.png" alt="Kyoshin Report BOT Screenshot" style="max-width: 100%; height: auto;">
 </div>
 ※現在のものではありません
 
-> [!CAUTION]
+> [!WARNING]
 >## 始める前に
-> このブランチはAlpha版です。完全な動作を確認していません。
-> また間違っている部分もある可能性があります。
-> 十分注意して使用してください。
->
-> 動作を確認したらmainブランチにコミットをします。
+> プログラミング弱者が作ったコードなのでエラーが発生する可能性があります。
+> 環境によっては起動できない可能性があります。
+
 ## 環境構築
 
 > [!WARNING]
