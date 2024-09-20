@@ -18,7 +18,7 @@ client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
 
 channel_id = int(os.getenv('ChannelID'))
-VER = "alpha 0.1.3"
+VER = "alpha 0.1.4"
 
 status_p2pquake = "接続していません"
 status_wolfx = "接続していません"
@@ -209,7 +209,29 @@ async def process_p2pquake_info(data):
         formatted_intensity = '不明'
 
     if quaketype == "ScalePrompt":  # 震度速報
-        points_info = "\n".join([f"{point['addr']}: 震度{int(point['scale'] / 10)}" for point in data['points']])
+        def intensity(scale):
+            if scale == 10:
+                return "1"
+            elif scale == 20:
+                return "2"
+            elif scale == 30:
+                return "3"
+            elif scale == 40:
+                return "4"
+            elif scale == 45:
+                return "5弱"
+            elif scale == 50:
+                return "5強"
+            elif scale == 55:
+                return "6弱"
+            elif scale == 60:
+                return "6強"
+            elif scale == 70:
+                return "7"
+            else:
+                return "不明"
+
+        points_info = "\n".join([f"{point['addr']}: 震度{intensity(point['scale'])}" for point in data['points']])
         embed = discord.Embed(title="🌍 震度速報", description=f"{formatted_time}頃、\n**最大震度{formatted_intensity}**を観測する地震が発生しました。\n**{tsunami_text}** \n今後の情報に注意してください。", color=color)
         embed.add_field(name="震度情報", value=points_info, inline=False)
 
@@ -236,7 +258,6 @@ async def process_p2pquake_info(data):
         await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"地震情報: {place}で最大震度{formatted_intensity}の地震がありました"))
         await asyncio.sleep(20)
         await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, RAM, Ping計測中"))
-        
 
     elif quaketype == "Foreign":  # 遠地地震情報
         image = 'foreign.png'
