@@ -334,7 +334,7 @@ async def process_p2pquake_tsunami(data):
         name = area.get('name', '不明')
         first_arrival = area.get('firstHeight', {}).get('arrivalTime', '不明')
         try:
-            arrival_time_obj = datetime.datetime.strptime(first_arrival, "%Y/%m/%d %H:%M:%S")
+            arrival_time_obj = datetime.strptime(first_arrival, "%Y/%m/%d %H:%M:%S")
             formatted_arrival_time = arrival_time_obj.strftime("%d日%H時%M分")
         except ValueError:
             formatted_arrival_time = '不明'
@@ -345,7 +345,7 @@ async def process_p2pquake_tsunami(data):
     formatted_issue_time = '不明'
     if issue_time != '不明':
         try:
-            issue_time_obj = datetime.datetime.strptime(issue_time, "%Y/%m/%d %H:%M:%S")
+            issue_time_obj = datetime.strptime(issue_time, "%Y/%m/%d %H:%M:%S")
             formatted_issue_time = issue_time_obj.strftime("%d日%H時%M分")
         except ValueError:
             formatted_issue_time = '不明'
