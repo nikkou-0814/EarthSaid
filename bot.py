@@ -409,14 +409,18 @@ async def process_eew_data(data, is_test=False):
     chiiki_list = [area.get('Chiiki', '不明') for area in warn_area]
     chiiki = ', '.join(chiiki_list) if chiiki_list else '発表なし'
     magnitude = data.get('Magunitude', '不明')
-    formatted_mag = "{:.1f}".format(float(magnitude)) if magnitude != '不明' else '不明'
+    formatted_mag = "{:.1f}".format(float(magnitude)) if isinstance(magnitude, (int, float)) or magnitude.replace('.', '', 1).isdigit() else '不明'
     max_intensity = data.get('MaxIntensity', '不明')
     ac_epicenter = data.get('Accuracy', {}).get('Epicenter', '不明')
     ac_depth = data.get('Accuracy', {}).get('Depth', '不明')
     ac_magnitude = data.get('Accuracy', {}).get('Magnitude', '不明')
     origin_time_str = data.get('OriginTime', '不明')
     hypocenter = data.get('Hypocenter', '不明')
-    depth = data.get('Depth', '不明')
+    depth = data.get('hypocenter', {}).get('depth', '不明')
+    if isinstance(depth, (int, float)):
+        formatted_depth = f"{depth}km"
+    else:
+        formatted_depth = '不明'
     
     try:
         origin_time_obj = datetime.strptime(origin_time_str, "%Y/%m/%d %H:%M:%S")
@@ -473,7 +477,7 @@ async def process_eew_data(data, is_test=False):
     embed = discord.Embed(title=title, description=description, color=color)
     embed.add_field(name="推定震源地", value=hypocenter, inline=True)
     embed.add_field(name="マグニチュード", value=f"M{formatted_mag}", inline=True)
-    embed.add_field(name="深さ", value=f"{depth}km", inline=True)
+    embed.add_field(name="深さ", value=formatted_depth, inline=True)
     embed.add_field(name="震源の精度", value=ac_epicenter, inline=True)
     embed.add_field(name="深さの精度", value=ac_depth, inline=True)
     embed.add_field(name="マグニチュードの精度", value=ac_magnitude, inline=True)
