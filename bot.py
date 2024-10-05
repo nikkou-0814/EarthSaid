@@ -90,10 +90,10 @@ async def fetch_p2pquake():
                                 await process_p2pquake_info(data)
                             elif data["code"] == 552:
                                 await process_p2pquake_tsunami(data)
-                                print(data)
+                                # print(data)
                             elif data['code'] == 556:
                                 await process_p2pquake_eew(data)
-                                print(data)
+                                # print(data)
                             
         except aiohttp.ClientError as e:
             print(f"P2PQuake: WebSocket接続エラー: {e}")
@@ -325,42 +325,74 @@ async def process_p2pquake_eew(data):
     channel = client.get_channel(channel_id)
     await channel.send(embed=embed)
 
+#P2PQuake tsunami
 async def process_p2pquake_tsunami(data):
-    issue_type = data.get('issue', {}).get('type', '不明')
-    issue_time = data.get('issue', {}).get('time', '不明')
-    cancelled = data.get('issue', {}).get('cancelled', False)
+    issue_info = data.get('issue', {})
+    issue_type = issue_info.get('type', '不明')
+    issue_time_str = issue_info.get('time', '不明')
+    source = issue_info.get('source', '不明')
+
+    cancelled = data.get('cancelled', False)
     areas = data.get('areas', [])
 
-    areas_info = []
-    for area in areas:
-        name = area.get('name', '不明')
-        first_arrival = area.get('firstHeight', {}).get('arrivalTime', '不明')
+    if issue_time_str != '不明':
         try:
-            arrival_time_obj = datetime.strptime(first_arrival, "%Y/%m/%d %H:%M:%S")
-            formatted_arrival_time = arrival_time_obj.strftime("%d日%H時%M分")
-        except ValueError:
-            formatted_arrival_time = '不明'
-        areas_info.append(f"{name}（{formatted_arrival_time}）")
-
-    areas_text = "\n".join(areas_info)
-
-    formatted_issue_time = '不明'
-    if issue_time != '不明':
-        try:
-            issue_time_obj = datetime.strptime(issue_time, "%Y/%m/%d %H:%M:%S")
+            issue_time_obj = datetime.strptime(issue_time_str, "%Y/%m/%d %H:%M:%S")
             formatted_issue_time = issue_time_obj.strftime("%d日%H時%M分")
         except ValueError:
             formatted_issue_time = '不明'
+    else:
+        formatted_issue_time = '不明'
 
     if cancelled:
-        embed = discord.Embed(title="津波情報", description=f"{issue_type}が解除されました。", color=0x0000ff)
+        description = f"津波情報が解除されました。"
+        color = 0x00BFFF
+        embed = discord.Embed(title="🌊 津波情報", description=description, color=color)
     else:
-        embed = discord.Embed(title="津波情報", description=f"{issue_type}が発表されました。", color=0x0000ff)
+        description = f"津波情報が発表されました。"
+        color = 0xFF4500
+        embed = discord.Embed(title="🌊 津波情報", description=description, color=color)
         embed.add_field(name="発表時間", value=formatted_issue_time, inline=True)
-        embed.add_field(name="発表されたエリア", value=areas_text if areas_text else "エリアなし", inline=False)
 
-    embed.set_footer(text=f"気象庁 | Version {VER}")
+        if areas:
+            areas_info = []
+            for area in areas:
+                name = area.get('name', '不明')
+                grade = area.get('grade', '不明')
+                immediate = area.get('immediate', False)
+                first_height = area.get('firstHeight', {})
+                arrival_time_str = first_height.get('arrivalTime', '不明')
+                condition = first_height.get('condition', '不明')
 
+                if arrival_time_str != '不明':
+                    try:
+                        arrival_time_obj = datetime.strptime(arrival_time_str, "%Y/%m/%d %H:%M:%S")
+                        formatted_arrival_time = arrival_time_obj.strftime("%d日%H時%M分")
+                    except ValueError:
+                        formatted_arrival_time = '不明'
+                else:
+                    formatted_arrival_time = '不明'
+
+                max_height = area.get('maxHeight', {})
+                max_height_desc = max_height.get('description', '不明')
+                max_height_value = max_height.get('value', '不明')
+
+                area_text = (
+                    f"**{name}**\n"
+                    f"予報種別: {grade}\n"
+                    f"第1波到達予想時刻: {formatted_arrival_time}\n"
+                    f"状況: {condition}\n"
+                    f"予想高さ: {max_height_desc} ({max_height_value}m)\n"
+                    f"{'直ちに津波来襲と予想されています。' if immediate else ''}"
+                )
+                areas_info.append(area_text)
+
+            areas_text = "\n\n".join(areas_info)
+            embed.add_field(name="対象地域", value=areas_text, inline=False)
+        else:
+            embed.add_field(name="対象地域", value="エリアなし", inline=False)
+
+    embed.set_footer(text=f"{source} | Version {VER}")
     channel = client.get_channel(channel_id)
     await channel.send(embed=embed)
 
