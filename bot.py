@@ -18,7 +18,7 @@ client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
 
 channel_id = int(os.getenv('ChannelID'))
-VER = "beta 0.1.2"
+VER = "beta 0.1.1"
 
 status_p2pquake = "接続していません"
 status_wolfx = "接続していません"
@@ -29,7 +29,6 @@ P2PQUAKE_WS_URL = 'https://api.p2pquake.net/v2/ws'
 with open('testdata.json', 'r', encoding='utf-8') as f:
     test_data_list = json.load(f)
 
-
 @client.event
 async def on_ready():
     print("Bot起動完了")
@@ -39,7 +38,6 @@ async def on_ready():
     client.loop.create_task(fetch_p2pquake())
     await change_bot_presence(client)
 
-
 async def change_bot_presence(client):
     while True:
         try:
@@ -48,7 +46,7 @@ async def change_bot_presence(client):
             memory_usage = memory_info.percent
 
             latency = client.latency * 1000
-            ping = "N/A" if latency == float('inf') else round(latency)
+            ping = round(latency) if latency != float('inf') else "N/A"
 
             status_message = f"CPU: {cpu_usage}% | RAM: {memory_usage}% | Ping: {ping}ms"
             await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=status_message))
@@ -59,8 +57,22 @@ async def change_bot_presence(client):
         except Exception as e:
             print(f"予期しないエラーが発生しました: {e}")
 
+async def run_speedtest():
+    try:
+        st = await asyncio.to_thread(speedtest.Speedtest)
+        await asyncio.to_thread(st.get_best_server)
+        download_speed = await asyncio.to_thread(lambda: int(st.download() / 10**6))
+        upload_speed = await asyncio.to_thread(lambda: int(st.upload() / 10**6))
+        server_info = st.results.server['name']
+    except Exception as e:
+        download_speed = "N/A"
+        upload_speed = "N/A"
+        server_info = "N/A"
+        print(f"スピードテストに失敗しました: {e}")
+    
+    return server_info, download_speed, upload_speed
 
-# WebSocket connection
+#WebSocket connection
 async def fetch_p2pquake():
     global status_p2pquake
     p2pretry_count = 0
@@ -78,59 +90,54 @@ async def fetch_p2pquake():
                                 await process_p2pquake_info(data)
                             elif data["code"] == 552:
                                 await process_p2pquake_tsunami(data)
+                                print(data)
                             elif data['code'] == 556:
                                 await process_p2pquake_eew(data)
+                                print(data)
+                            
         except aiohttp.ClientError as e:
             print(f"P2PQuake: WebSocket接続エラー: {e}")
             status_p2pquake = "接続エラー"
-            await asyncio.sleep(5)
         except Exception as e:
             print(f"P2PQuake: エラーが発生しました: {e}")
             status_p2pquake = "接続エラー"
-            await asyncio.sleep(5)
         finally:
             p2pretry_count += 1
             print(f"P2PQuake: 5秒後に再接続を試みます... (試行回数: {p2pretry_count})")
             status_p2pquake = "再接続中"
             await asyncio.sleep(5)
-            status_p2pquake = "接続中"
-
 
 async def fetch_wolfx(data=None):
     global status_wolfx
-    wolfxretry_count = 0
-    while True:
-        try:
-            async with aiohttp.ClientSession() as session:
-                if data:
-                    await process_eew_data(data, is_test=True)
-                    return
-                async with session.ws_connect(WOLFX_WS_URL) as ws:
-                    status_wolfx = "接続しています"
-                    print("Wolfxへ接続しました。")
-                    wolfxretry_count = 0
-                    async for msg in ws:
-                        if msg.type == aiohttp.WSMsgType.TEXT:
-                            data = json.loads(msg.data)
-                            if data['type'] == 'jma_eew':
-                                await process_eew_data(data)
-        except aiohttp.ClientError as e:
-            print(f"Wolfx: WebSocket接続エラー: {e}")
-            status_wolfx = "接続エラー"
-            await asyncio.sleep(5)
-        except Exception as e:
-            print(f"Wolfx: エラーが発生しました: {e}")
-            status_wolfx = "接続エラー"
-            await asyncio.sleep(5)
-        finally:
-            wolfxretry_count += 1
-            print(f"Wolfx: 5秒後に再接続を試みます... (試行回数: {wolfxretry_count})")
-            status_wolfx = "再接続中"
-            await asyncio.sleep(5)
-            status_wolfx = "接続中"
+    async with aiohttp.ClientSession() as session:
+        if data:
+            await process_eew_data(data, is_test=True)
+        else:
+            wolfxretry_count = 0
+            while True:
+                try:
+                    async with session.ws_connect(WOLFX_WS_URL) as ws:
+                        status_wolfx = "接続しています"
+                        print("Wolfxへ接続しました。")
+                        wolfxretry_count = 0
+                        async for msg in ws:
+                            if msg.type == aiohttp.WSMsgType.TEXT:
+                                data = json.loads(msg.data)
+                                if data['type'] == 'jma_eew':
+                                    await process_eew_data(data)
+                except aiohttp.ClientError as e:
+                    print(f"Wolfx: WebSocket接続エラー: {e}")
+                    status_wolfx = "接続エラー"
+                except Exception as e:
+                    print(f"Wolfx: エラーが発生しました: {e}")
+                    status_wolfx = "接続エラー"
+                finally:
+                    wolfxretry_count += 1
+                    print(f"Wolfx: 5秒後に再接続を試みます... (試行回数: {wolfxretry_count})")
+                    status_wolfx = "再接続中"
+                    await asyncio.sleep(5)
 
-
-#　P2PQuake info
+#P2PQuake info
 async def process_p2pquake_info(data):
     quaketype = data.get('issue', {}).get('type', '不明')
     source = data.get('issue', {}).get('source', '不明')
@@ -280,7 +287,7 @@ async def process_p2pquake_info(data):
         await channel.send(embed=embed)
 
 
-#　P2PQuake eew
+#P2PQuake eew
 async def process_p2pquake_eew(data):
     hypocenter_name = data.get('earthquake', {}).get('hypocenter', {}).get('name', '不明')
     magnitude = data.get('earthquake', {}).get('hypocenter', {}).get('magnitude', '不明')
@@ -318,79 +325,46 @@ async def process_p2pquake_eew(data):
     channel = client.get_channel(channel_id)
     await channel.send(embed=embed)
 
-
-# P2PQuake Tsunami
 async def process_p2pquake_tsunami(data):
-    issue_info = data.get('issue', {})
-    issue_type = issue_info.get('type', '不明')
-    issue_time_str = issue_info.get('time', '不明')
-    source = issue_info.get('source', '不明')
-    cancelled = data.get('cancelled', False)
+    issue_type = data.get('issue', {}).get('type', '不明')
+    issue_time = data.get('issue', {}).get('time', '不明')
+    cancelled = data.get('issue', {}).get('cancelled', False)
     areas = data.get('areas', [])
 
-    if issue_time_str != '不明':
+    areas_info = []
+    for area in areas:
+        name = area.get('name', '不明')
+        first_arrival = area.get('firstHeight', {}).get('arrivalTime', '不明')
         try:
-            issue_time_obj = datetime.strptime(issue_time_str, "%Y/%m/%d %H:%M:%S")
+            arrival_time_obj = datetime.strptime(first_arrival, "%Y/%m/%d %H:%M:%S")
+            formatted_arrival_time = arrival_time_obj.strftime("%d日%H時%M分")
+        except ValueError:
+            formatted_arrival_time = '不明'
+        areas_info.append(f"{name}（{formatted_arrival_time}）")
+
+    areas_text = "\n".join(areas_info)
+
+    formatted_issue_time = '不明'
+    if issue_time != '不明':
+        try:
+            issue_time_obj = datetime.strptime(issue_time, "%Y/%m/%d %H:%M:%S")
             formatted_issue_time = issue_time_obj.strftime("%d日%H時%M分")
         except ValueError:
             formatted_issue_time = '不明'
-    else:
-        formatted_issue_time = '不明'
 
     if cancelled:
-        description = f"津波情報が解除されました。"
-        color = 0x00BFFF
-        embed = discord.Embed(title="🌊 津波情報", description=description, color=color)
+        embed = discord.Embed(title="津波情報", description=f"{issue_type}が解除されました。", color=0x0000ff)
     else:
-        description = f"津波情報が発表されました。"
-        color = 0xFF4500
-        embed = discord.Embed(title="🌊 津波情報", description=description, color=color)
+        embed = discord.Embed(title="津波情報", description=f"{issue_type}が発表されました。", color=0x0000ff)
         embed.add_field(name="発表時間", value=formatted_issue_time, inline=True)
+        embed.add_field(name="発表されたエリア", value=areas_text if areas_text else "エリアなし", inline=False)
 
-        if areas:
-            areas_info = []
-            for area in areas:
-                name = area.get('name', '不明')
-                grade = area.get('grade', '不明')
-                immediate = area.get('immediate', False)
-                first_height = area.get('firstHeight', {})
-                arrival_time_str = first_height.get('arrivalTime', '不明')
-                condition = first_height.get('condition', '不明')
+    embed.set_footer(text=f"気象庁 | Version {VER}")
 
-                if arrival_time_str != '不明':
-                    try:
-                        arrival_time_obj = datetime.strptime(arrival_time_str, "%Y/%m/%d %H:%M:%S")
-                        formatted_arrival_time = arrival_time_obj.strftime("%d日%H時%M分")
-                    except ValueError:
-                        formatted_arrival_time = '不明'
-                else:
-                    formatted_arrival_time = '不明'
-
-                max_height = area.get('maxHeight', {})
-                max_height_desc = max_height.get('description', '不明')
-                max_height_value = max_height.get('value', '不明')
-
-                area_text = (
-                    f"**{name}**\n"
-                    f"予報種別: {grade}\n"
-                    f"第1波到達予想時刻: {formatted_arrival_time}\n"
-                    f"状況: {condition}\n"
-                    f"予想高さ: {max_height_desc} ({max_height_value}m)\n"
-                    f"{'直ちに津波来襲と予想されています。' if immediate else ''}"
-                )
-                areas_info.append(area_text)
-
-            areas_text = "\n\n".join(areas_info)
-            embed.add_field(name="対象地域", value=areas_text, inline=False)
-        else:
-            embed.add_field(name="対象地域", value="エリアなし", inline=False)
-
-    embed.set_footer(text=f"{source} | Version {VER}")
     channel = client.get_channel(channel_id)
     await channel.send(embed=embed)
 
-
-#　Wolfx
+#Wolfx
 async def process_eew_data(data, is_test=False):
     forecast_warning = os.getenv('ForecastWarning')
 
@@ -409,18 +383,14 @@ async def process_eew_data(data, is_test=False):
     chiiki_list = [area.get('Chiiki', '不明') for area in warn_area]
     chiiki = ', '.join(chiiki_list) if chiiki_list else '発表なし'
     magnitude = data.get('Magunitude', '不明')
-    formatted_mag = "{:.1f}".format(float(magnitude)) if isinstance(magnitude, (int, float)) or magnitude.replace('.', '', 1).isdigit() else '不明'
+    formatted_mag = "{:.1f}".format(float(magnitude)) if magnitude != '不明' else '不明'
     max_intensity = data.get('MaxIntensity', '不明')
     ac_epicenter = data.get('Accuracy', {}).get('Epicenter', '不明')
     ac_depth = data.get('Accuracy', {}).get('Depth', '不明')
     ac_magnitude = data.get('Accuracy', {}).get('Magnitude', '不明')
     origin_time_str = data.get('OriginTime', '不明')
     hypocenter = data.get('Hypocenter', '不明')
-    depth = data.get('hypocenter', {}).get('depth', '不明')
-    if isinstance(depth, (int, float)):
-        formatted_depth = f"{depth}km"
-    else:
-        formatted_depth = '不明'
+    depth = data.get('Depth', '不明')
     
     try:
         origin_time_obj = datetime.strptime(origin_time_str, "%Y/%m/%d %H:%M:%S")
@@ -477,7 +447,7 @@ async def process_eew_data(data, is_test=False):
     embed = discord.Embed(title=title, description=description, color=color)
     embed.add_field(name="推定震源地", value=hypocenter, inline=True)
     embed.add_field(name="マグニチュード", value=f"M{formatted_mag}", inline=True)
-    embed.add_field(name="深さ", value=formatted_depth, inline=True)
+    embed.add_field(name="深さ", value=f"{depth}km", inline=True)
     embed.add_field(name="震源の精度", value=ac_epicenter, inline=True)
     embed.add_field(name="深さの精度", value=ac_depth, inline=True)
     embed.add_field(name="マグニチュードの精度", value=ac_magnitude, inline=True)
@@ -496,14 +466,12 @@ async def process_eew_data(data, is_test=False):
         await asyncio.sleep(20)
         await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, RAM, Ping計測中"))
 
-
 @tree.command(name="testdata", description="eewのテストをします")
 async def testdata(interaction: discord.Interaction):
     await interaction.response.send_message("# 実際の地震ではありません \nテストデータの送信を開始します。")
     for data in test_data_list:
-        await process_eew_data(data)
+        await fetch_wolfx(data)
         await asyncio.sleep(random.uniform(0.5, 1))
-
 
 async def run_speedtest():
     try:
