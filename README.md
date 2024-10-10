@@ -1,4 +1,4 @@
-# Earth Said BOT
+# EarthSaid
 
 <div style="text-align: center;">
     <img src="screenshot.png" alt="Kyoshin Report BOT Screenshot" style="max-width: 100%; height: auto;">
