@@ -68,7 +68,7 @@ ForecastWarning=<Forecast,Warning,All>
 
 ## ```testdata.json```の記述(Wolfx APIの仕様)
 ### このリポジトリを改造、改良する方向け
-> [!CAUTION]
+> [!NOTE]
 > 一部翻訳がおかしい項目があります
 
 | **項目**                 | **説明**                           | **コード内で使用しているか** |
