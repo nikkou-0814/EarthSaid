@@ -66,8 +66,10 @@ ForecastWarning=<Forecast,Warning,All>
 
 ```All```の場合はすべての緊急地震速報を送信します。
 
-## ```testdata.json```の記述(wolfx APIの仕様に基づく)
+## ```testdata.json```の記述(Wolfx APIの仕様)
 ### このリポジトリを改造、改良する方向け
+> [!CAUTION]
+> 一部翻訳がおかしい項目があります
 
 | **項目**                 | **説明**                           | **コード内で使用しているか** |
 |-------------------------|------------------------------------|------------------------|
@@ -121,6 +123,6 @@ ForecastWarning=<Forecast,Warning,All>
 
 ### 地震情報API > P2PQuake JSON API v2
 
-### 緊急地震API > wolfx API
+### 緊急地震API > Wolfx API
 
 ### テストデータ > dmdata.jp 緊急地震速報イベント一覧 より一部改変
