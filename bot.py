@@ -490,7 +490,7 @@ async def process_eew_data(data, is_test=False):
 async def testdata(interaction: discord.Interaction):
     await interaction.response.send_message("# 実際の地震ではありません \nテストデータの送信を開始します。")
     for data in test_data_list:
-        await fetch_wolfx(data)
+        await process_eew_data(data,is_test=True)
         await asyncio.sleep(random.uniform(0.5, 1))
 
 async def run_speedtest():
