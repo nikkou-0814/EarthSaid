@@ -34,8 +34,8 @@ async def on_ready():
     print("Bot起動完了")
     await tree.sync()
     await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, RAM, Ping計測中"))
-    client.loop.create_task(fetch_wolfx())
     client.loop.create_task(fetch_p2pquake())
+    client.loop.create_task(fetch_wolfx())
     await change_bot_presence(client)
 
 async def change_bot_presence(client):
@@ -73,69 +73,57 @@ async def run_speedtest():
     return server_info, download_speed, upload_speed
 
 #WebSocket connection
-async def fetch_p2pquake():
-    global status_p2pquake
-    p2pretry_count = 0
+async def websocket_listener(url, process_function, status_variable_name):
+    retry_count = 0
+    session = aiohttp.ClientSession()
     while True:
         try:
-            async with aiohttp.ClientSession() as session:
-                async with session.ws_connect(P2PQUAKE_WS_URL) as ws:
-                    status_p2pquake = "接続しています"
-                    print("P2PQuakeへ接続しました。")
-                    p2pretry_count = 0
-                    async for msg in ws:
-                        if msg.type == aiohttp.WSMsgType.TEXT:
-                            data = json.loads(msg.data)
-                            if data['code'] == 551:
-                                await process_p2pquake_info(data)
-                            elif data["code"] == 552:
-                                await process_p2pquake_tsunami(data)
-                                # print(data)
-                            elif data['code'] == 556:
-                                await process_p2pquake_eew(data)
-                                # print(data)
-                            
+            async with session.ws_connect(url) as ws:
+                globals()[status_variable_name] = "接続しています"
+                print(f"{url}へ接続しました。")
+                retry_count = 0
+                async for msg in ws:
+                    if msg.type == aiohttp.WSMsgType.TEXT:
+                        data = json.loads(msg.data)
+                        await process_function(data)
         except aiohttp.ClientError as e:
-            print(f"P2PQuake: WebSocket接続エラー: {e}")
-            status_p2pquake = "接続エラー"
+            print(f"{url}: WebSocket接続エラー: {e}")
+            globals()[status_variable_name] = "接続エラー"
         except Exception as e:
-            print(f"P2PQuake: エラーが発生しました: {e}")
-            status_p2pquake = "接続エラー"
+            print(f"{url}: エラーが発生しました: {e}")
+            globals()[status_variable_name] = "接続エラー"
         finally:
-            p2pretry_count += 1
-            print(f"P2PQuake: 5秒後に再接続を試みます... (試行回数: {p2pretry_count})")
-            status_p2pquake = "再接続中"
+            retry_count += 1
+            print(f"{url}: 5秒後に再接続を試みます... (試行回数: {retry_count})")
+            globals()[status_variable_name] = "再接続中"
             await asyncio.sleep(5)
+    await session.close()
 
-async def fetch_wolfx(data=None):
-    global status_wolfx
-    async with aiohttp.ClientSession() as session:
-        if data:
-            await process_eew_data(data, is_test=True)
-        else:
-            wolfxretry_count = 0
-            while True:
-                try:
-                    async with session.ws_connect(WOLFX_WS_URL) as ws:
-                        status_wolfx = "接続しています"
-                        print("Wolfxへ接続しました。")
-                        wolfxretry_count = 0
-                        async for msg in ws:
-                            if msg.type == aiohttp.WSMsgType.TEXT:
-                                data = json.loads(msg.data)
-                                if data['type'] == 'jma_eew':
-                                    await process_eew_data(data)
-                except aiohttp.ClientError as e:
-                    print(f"Wolfx: WebSocket接続エラー: {e}")
-                    status_wolfx = "接続エラー"
-                except Exception as e:
-                    print(f"Wolfx: エラーが発生しました: {e}")
-                    status_wolfx = "接続エラー"
-                finally:
-                    wolfxretry_count += 1
-                    print(f"Wolfx: 5秒後に再接続を試みます... (試行回数: {wolfxretry_count})")
-                    status_wolfx = "再接続中"
-                    await asyncio.sleep(5)
+async def process_p2pquake_message(data):
+    if data['code'] == 551:
+        await process_p2pquake_info(data)
+    elif data["code"] == 552:
+        await process_p2pquake_tsunami(data)
+    elif data['code'] == 556:
+        await process_p2pquake_eew(data)
+
+async def process_wolfx_message(data):
+    if data.get('type') == 'jma_eew':
+        await process_eew_data(data)
+
+async def fetch_p2pquake():
+    await websocket_listener(
+        P2PQUAKE_WS_URL,
+        process_p2pquake_message,
+        'status_p2pquake'
+    )
+
+async def fetch_wolfx():
+    await websocket_listener(
+        WOLFX_WS_URL,
+        process_wolfx_message,
+        'status_wolfx'
+    )
 
 #P2PQuake info
 async def process_p2pquake_info(data):
