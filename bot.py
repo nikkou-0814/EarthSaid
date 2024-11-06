@@ -9,6 +9,7 @@ import random
 import psutil
 import json
 import os
+import traceback
 
 load_dotenv()
 
@@ -18,7 +19,7 @@ client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
 
 channel_id = int(os.getenv('ChannelID'))
-VER = "beta 0.1.1"
+VER = "beta 0.1.2"
 
 status_p2pquake = "接続していません"
 status_wolfx = "接続していません"
@@ -34,9 +35,9 @@ async def on_ready():
     print("Bot起動完了")
     await tree.sync()
     await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, RAM, Ping計測中"))
-    client.loop.create_task(fetch_p2pquake())
-    client.loop.create_task(fetch_wolfx())
-    await change_bot_presence(client)
+    client.fetch_p2pquake_task = asyncio.create_task(fetch_p2pquake())
+    client.fetch_wolfx_task = asyncio.create_task(fetch_wolfx())
+    client.change_bot_presence_task = asyncio.create_task(change_bot_presence(client))
 
 async def change_bot_presence(client):
     while True:
@@ -56,6 +57,7 @@ async def change_bot_presence(client):
             await asyncio.sleep(5)
         except Exception as e:
             print(f"予期しないエラーが発生しました: {e}")
+            traceback.print_exc()
 
 async def run_speedtest():
     try:
@@ -72,12 +74,12 @@ async def run_speedtest():
     
     return server_info, download_speed, upload_speed
 
-#WebSocket connection
+# WebSocket connection
 async def websocket_listener(url, process_function, status_variable_name):
     retry_count = 0
-    session = aiohttp.ClientSession()
     while True:
         try:
+            session = aiohttp.ClientSession()
             async with session.ws_connect(url) as ws:
                 globals()[status_variable_name] = "接続しています"
                 print(f"{url}へ接続しました。")
@@ -91,13 +93,14 @@ async def websocket_listener(url, process_function, status_variable_name):
             globals()[status_variable_name] = "接続エラー"
         except Exception as e:
             print(f"{url}: エラーが発生しました: {e}")
+            traceback.print_exc()
             globals()[status_variable_name] = "接続エラー"
         finally:
+            await session.close()
             retry_count += 1
             print(f"{url}: 5秒後に再接続を試みます... (試行回数: {retry_count})")
             globals()[status_variable_name] = "再接続中"
             await asyncio.sleep(5)
-    await session.close()
 
 async def process_p2pquake_message(data):
     if data['code'] == 551:
@@ -112,20 +115,32 @@ async def process_wolfx_message(data):
         await process_eew_data(data)
 
 async def fetch_p2pquake():
-    await websocket_listener(
-        P2PQUAKE_WS_URL,
-        process_p2pquake_message,
-        'status_p2pquake'
-    )
+    while True:
+        try:
+            await websocket_listener(
+                P2PQUAKE_WS_URL,
+                process_p2pquake_message,
+                'status_p2pquake'
+            )
+        except Exception as e:
+            print(f"fetch_p2pquake: エラーが発生しました: {e}")
+            traceback.print_exc()
+            await asyncio.sleep(5)
 
 async def fetch_wolfx():
-    await websocket_listener(
-        WOLFX_WS_URL,
-        process_wolfx_message,
-        'status_wolfx'
-    )
+    while True:
+        try:
+            await websocket_listener(
+                WOLFX_WS_URL,
+                process_wolfx_message,
+                'status_wolfx'
+            )
+        except Exception as e:
+            print(f"fetch_wolfx: エラーが発生しました: {e}")
+            traceback.print_exc()
+            await asyncio.sleep(5)
 
-#P2PQuake info
+# P2PQuake info
 async def process_p2pquake_info(data):
     quaketype = data.get('issue', {}).get('type', '不明')
     source = data.get('issue', {}).get('source', '不明')
@@ -275,7 +290,7 @@ async def process_p2pquake_info(data):
         await channel.send(embed=embed)
 
 
-#P2PQuake eew
+# P2PQuake eew
 async def process_p2pquake_eew(data):
     hypocenter_name = data.get('earthquake', {}).get('hypocenter', {}).get('name', '不明')
     magnitude = data.get('earthquake', {}).get('hypocenter', {}).get('magnitude', '不明')
@@ -313,7 +328,7 @@ async def process_p2pquake_eew(data):
     channel = client.get_channel(channel_id)
     await channel.send(embed=embed)
 
-#P2PQuake tsunami
+# P2PQuake tsunami
 async def process_p2pquake_tsunami(data):
     issue_info = data.get('issue', {})
     issue_type = issue_info.get('type', '不明')
@@ -384,7 +399,7 @@ async def process_p2pquake_tsunami(data):
     channel = client.get_channel(channel_id)
     await channel.send(embed=embed)
 
-#Wolfx
+# Wolfx
 async def process_eew_data(data, is_test=False):
     forecast_warning = os.getenv('ForecastWarning')
 
