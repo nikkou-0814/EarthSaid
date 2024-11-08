@@ -53,9 +53,9 @@
         "Depth": 10,
         "MaxIntensity": "N/A",
         "Accuracy": {
-            "Epicenter": "IPF法(1点)",
-            "Depth": "IPF法(1点)",
-            "Magnitude": "IPF法(1点)"
+            "Epicenter": "P 波／S 波レベル超え、IPF 法（1 点）、または仮定震源要素",
+            "Depth": "P 波／S 波レベル超え、IPF 法（1 点）、または仮定震源要素",
+            "Magnitude": "P 波／S 波レベル超え、または仮定震源要素"
         },
         "MaxIntChange": {
             "String": "ほとんど変化なし",
@@ -89,9 +89,9 @@
         "Depth": 10,
         "MaxIntensity": "N/A",
         "Accuracy": {
-            "Epicenter": "IPF法(1点)",
-            "Depth": "IPF法(1点)",
-            "Magnitude": "IPF法(1点)"
+            "Epicenter": "P 波／S 波レベル超え、IPF 法（1 点）、または仮定震源要素",
+            "Depth": "P 波／S 波レベル超え、IPF 法（1 点）、または仮定震源要素",
+            "Magnitude": "P 波／S 波レベル超え、または仮定震源要素"
         },
         "MaxIntChange": {
             "String": "ほとんど変化なし",
