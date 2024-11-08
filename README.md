@@ -27,7 +27,7 @@ git clone https://github.com/nikkou-0814/Earth-Said-BOT.git
 
 1. .env.exampleファイルをコピーします。
 
-2. ファイル名を```.env```に変更
+2. ファイル名を`.env`に変更
 
 2. Discord BOT のトークンとチャンネルIDを記載します。
 
@@ -48,23 +48,36 @@ python bot.py
 
 ## 情報送信条件
 ### 使用方法
+`.env`に以下を追加
 ```env
 ForecastWarning=<Forecast,Warning,All>
 ```
 
-```Forecast```、```Warning```、```All```から一つ選択
+`Forecast`、`Warning`、`All`から一つ選択
 
 ### Forecast
 
-```Forecast```の場合は緊急地震速報（予報）のみ送信します。
+`Forecast`の場合は緊急地震速報（予報）のみ送信します。
 
 ### Warning
 
-```Warning```の場合は緊急地震速報（警報）のみ送信します。
+`Warning`の場合は緊急地震速報（警報）のみ送信します。
 
 ### All
 
-```All```の場合はすべての緊急地震速報を送信します。
+`All`の場合はすべての緊急地震速報を送信します。
+
+## 震源やマグニチュードの精度情報
+`.env`に以下を追加
+```env
+AccuracyBoolean=<Boolean>
+```
+`True`または`False`から選択
+### True
+震源の精度、深さの精度、マグニチュードの精度をEEWのメッセージに追加します。
+
+### False
+震源の精度、深さの精度、マグニチュードの精度をEEWのメッセージに追加しません。
 
 ## ```testdata.json```の記述(Wolfx APIの仕様)
 ### このリポジトリを改造、改良する方向け

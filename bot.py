@@ -154,6 +154,7 @@ async def process_p2pquake_info(data):
     domestic_tsunami = details.get('domesticTsunami', '情報なし')
     occurrence_time = details.get('time', '不明')
     formatted_time = '不明'
+    comments = data.get('comments', {}).get('freeFormComment', '不明')
 
     if occurrence_time != '不明':
         try:
@@ -167,6 +168,15 @@ async def process_p2pquake_info(data):
         "この地震による津波の有無は不明です。" if domestic_tsunami == "Unknown" else
         "この地震による津波の有無は現在調査中です。" if domestic_tsunami == "Checking" else
         "この地震により若干の海面変動が予想されますが、被害の心配はありません。" if domestic_tsunami == "NonEffective" else
+        "この地震により津波注意報が発表されています。" if domestic_tsunami == "Watch" else
+        "この地震により津波警報が発表されています。" if domestic_tsunami == "Warning" else
+        "情報なし"
+    )
+    foreign_tsunami_text = (
+        "この地震による日本への津波の心配はありません。" if domestic_tsunami == "None" else
+        "この地震による津波の有無は不明です。" if domestic_tsunami == "Unknown" else
+        "日本への津波の有無については現在調査中です。" if domestic_tsunami == "Checking" else
+        "この地震による日本への津波の心配はありませんが、若干の海面変動があるかもしれません。" if domestic_tsunami == "NonEffective" else
         "この地震により津波注意報が発表されています。" if domestic_tsunami == "Watch" else
         "この地震により津波警報が発表されています。" if domestic_tsunami == "Warning" else
         "情報なし"
@@ -264,16 +274,38 @@ async def process_p2pquake_info(data):
         await asyncio.sleep(20)
         await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, RAM, Ping計測中"))
 
-    elif quaketype == "Foreign":  # 遠地地震情報
-        image = 'foreign.png'
-        embed = discord.Embed(title="🌍 遠地地震情報", description=f"{formatted_time}頃、\n海外で大きな地震がありました。\n**{tsunami_text}**", color=color)
+    elif quaketype == "Foreign":  # 遠地地震情報、噴火情報
+        comments = data.get('comments', {}).get('freeFormComment', None)
+        is_eruption = (
+            data.get('earthquake', {}).get('hypocenter', {}).get('name') == '不明' or
+            (comments and '大規模な噴火が発生しました' in comments)
+        )
+        embed = discord.Embed(
+            title="🌋 遠地噴火情報" if is_eruption else "🌍 遠地地震情報",
+            description=f"{formatted_time}頃、\n海外で大きな{'噴火' if is_eruption else '地震'}がありました。\n**{foreign_tsunami_text}**",
+            color=color
+        )
         embed.add_field(name="震源", value=place, inline=True)
-        embed.add_field(name="マグニチュード", value=f"M{formatted_mag}", inline=True)
-        embed.add_field(name="深さ", value=depth, inline=True)
-        
-        await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"遠地地震: {place}, M{formatted_mag}"))
+        if is_eruption:
+            embed.add_field(name="噴火情報", value="**大規模な噴火が発生しました**", inline=True)
+            image = 'volcano.png'
+        else:
+            embed.add_field(name="マグニチュード", value=f"M{formatted_mag}", inline=True)
+            embed.add_field(name="深さ", value=depth, inline=True)
+            image = 'foreign.png'
+
+        if comments:
+            embed.add_field(name="コメント", value=comments, inline=False)
+
+        await client.change_presence(
+            status=discord.Status.online,
+            activity=discord.CustomActivity(name=f"遠地{'噴火' if is_eruption else '地震'}: {place}, M{formatted_mag}")
+        )
         await asyncio.sleep(20)
-        await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, RAM, Ping計測中"))
+        await client.change_presence(
+            status=discord.Status.online,
+            activity=discord.CustomActivity(name=f"CPU, RAM, Ping計測中")
+        )
 
     elif quaketype == "Other":  # その他の地震情報
         embed = discord.Embed(title="🌍 地震情報(その他)", description=f"{formatted_time}頃、\n地震がありました。", color=color)
@@ -295,6 +327,15 @@ async def process_p2pquake_eew(data):
     hypocenter_name = data.get('earthquake', {}).get('hypocenter', {}).get('name', '不明')
     magnitude = data.get('earthquake', {}).get('hypocenter', {}).get('magnitude', '不明')
     depth = data.get('earthquake', {}).get('hypocenter', {}).get('depth', '不明')
+    condition = data.get('earthquake', {}).get('condition', '')
+    cancelled = data.get('cancelled', 'False')
+    channel = client.get_channel(channel_id)
+
+    if cancelled:
+        embed = discord.Embed(title="❌先程の緊急地震速報はキャンセルされました", description="", color=discord.Color.green)
+        embed.set_footer(text=f"気象庁 | Version {VER}")
+        await channel.send(embed=embed)
+        return
 
     areas_info = []
     for area in data.get('areas', []):
@@ -322,10 +363,11 @@ async def process_p2pquake_eew(data):
     embed.add_field(name="震源地", value=hypocenter_name, inline=True)
     embed.add_field(name="マグニチュード", value=f"M{magnitude}", inline=True)
     embed.add_field(name="深さ", value=f"{depth}km", inline=True)
+    if condition:
+        embed.add_field(name="仮定震源要素", value="以上の情報は仮に割り振られた情報であり、地震学的な意味を持ちません", inline=True)
     embed.add_field(name="発表地域、到達予想時刻", value=areas_text if areas_text else "発表なし", inline=False)
     embed.set_footer(text=f"気象庁 | Version {VER}")
 
-    channel = client.get_channel(channel_id)
     await channel.send(embed=embed)
 
 # P2PQuake tsunami
@@ -402,6 +444,7 @@ async def process_p2pquake_tsunami(data):
 # Wolfx
 async def process_eew_data(data, is_test=False):
     forecast_warning = os.getenv('ForecastWarning')
+    accuracy_boolean = os.getenv('AccuracyBoolean', 'False').lower() == 'true'
 
     if forecast_warning == 'None':
         return
@@ -416,7 +459,7 @@ async def process_eew_data(data, is_test=False):
     is_assumption = data.get('isAssumption', False)
     warn_area = data.get('WarnArea', [])
     chiiki_list = [area.get('Chiiki', '不明') for area in warn_area]
-    chiiki = ', '.join(chiiki_list) if chiiki_list else '発表なし'
+    chiiki = ', '.join(chiiki_list) if chiiki_list else '不明'
     magnitude = data.get('Magunitude', '不明')
     formatted_mag = "{:.1f}".format(float(magnitude)) if magnitude != '不明' else '不明'
     max_intensity = data.get('MaxIntensity', '不明')
@@ -426,7 +469,17 @@ async def process_eew_data(data, is_test=False):
     origin_time_str = data.get('OriginTime', '不明')
     hypocenter = data.get('Hypocenter', '不明')
     depth = data.get('Depth', '不明')
-    
+    channel = client.get_channel(channel_id)
+    title_type = "警報" if data.get('isWarn', False) else "予報"
+    title = f"{'**テストデータです！**' if is_test else ''}{"🚨" if data.get('isWarn', False) else "⚠️"}緊急地震速報({title_type}) 第{report_number}報"
+    description = f"**{formatted_origin_time}頃{hypocenter}で地震、推定最大震度{max_intensity}**"
+    color = 0xff0000 if data.get('isWarn', False) else 0xffd700
+
+    if is_cancel:
+        embed = discord.Embed(title='緊急地震速報 キャンセル', description='先程の緊急地震速報はキャンセルされました', color=color)
+        await channel.send(embed=embed)
+        return
+
     try:
         origin_time_obj = datetime.strptime(origin_time_str, "%Y/%m/%d %H:%M:%S")
         formatted_origin_time = origin_time_obj.strftime("%d日%H時%M分")
@@ -455,16 +508,9 @@ async def process_eew_data(data, is_test=False):
         image = 'deep.png'
     else:
         image = 'unknown.png'
-
-    title_type = "警報" if data.get('isWarn', False) else "予報"
-    title = f"{'**テストデータです！**' if is_test else ''}{"🚨" if data.get('isWarn', False) else "⚠️"}緊急地震速報({title_type}) 第{report_number}報"
-    description = f"**{formatted_origin_time}頃{hypocenter}で地震、推定最大震度{max_intensity}**"
-    color = 0xff0000 if data.get('isWarn', False) else 0xffd700
     
     if is_final:
         title += "【最終報】"
-    if is_cancel:
-        title += "【キャンセル】"
     if is_assumption:
         title += "【仮定震源】"
 
@@ -483,17 +529,18 @@ async def process_eew_data(data, is_test=False):
     embed.add_field(name="推定震源地", value=hypocenter, inline=True)
     embed.add_field(name="マグニチュード", value=f"M{formatted_mag}", inline=True)
     embed.add_field(name="深さ", value=f"{depth}km", inline=True)
-    embed.add_field(name="震源の精度", value=ac_epicenter, inline=True)
-    embed.add_field(name="深さの精度", value=ac_depth, inline=True)
-    embed.add_field(name="マグニチュードの精度", value=ac_magnitude, inline=True)
-    embed.add_field(name="警報区域", value=chiiki, inline=False)
+    if accuracy_boolean:
+        embed.add_field(name="震源の精度", value=ac_epicenter, inline=True)
+        embed.add_field(name="深さの精度", value=ac_depth, inline=True)
+        embed.add_field(name="マグニチュードの精度", value=ac_magnitude, inline=True)
+    if chiiki:
+        embed.add_field(name="警報区域", value=chiiki, inline=False)
     embed.set_footer(text=f"気象庁 | Version {VER}")
 
     file_path = "eew/warning" if data.get('isWarn', False) else "eew/forecast"
     file = discord.File(f"{file_path}/{image}", filename=image)
     embed.set_thumbnail(url=f"attachment://{image}")
 
-    channel = client.get_channel(channel_id)
     await channel.send(embed=embed, file=file, silent=is_test)
     await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"{data['Hypocenter']}最大震度{max_intensity}の地震"))
     if is_final:
