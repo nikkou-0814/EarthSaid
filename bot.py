@@ -274,7 +274,7 @@ async def process_p2pquake_info(data):
         await asyncio.sleep(20)
         await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, RAM, Ping計測中"))
 
-    elif quaketype == "Foreign":  # 遠地地震情報、噴火情報
+    elif quaketype == "Foreign":  # 遠地地震、噴火情報
         comments = data.get('comments', {}).get('freeFormComment', None)
         is_eruption = (
             data.get('earthquake', {}).get('hypocenter', {}).get('name') == '不明' or
@@ -363,7 +363,7 @@ async def process_p2pquake_eew(data):
     embed.add_field(name="震源地", value=hypocenter_name, inline=True)
     embed.add_field(name="マグニチュード", value=f"M{magnitude}", inline=True)
     embed.add_field(name="深さ", value=f"{depth}km", inline=True)
-    if condition:
+    if condition == '仮定震源要素':
         embed.add_field(name="仮定震源要素", value="以上の情報は仮に割り振られた情報であり、地震学的な意味を持ちません", inline=True)
     embed.add_field(name="発表地域、到達予想時刻", value=areas_text if areas_text else "発表なし", inline=False)
     embed.set_footer(text=f"気象庁 | Version {VER}")
