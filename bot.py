@@ -459,7 +459,7 @@ async def process_eew_data(data, is_test=False):
     is_assumption = data.get('isAssumption', False)
     warn_area = data.get('WarnArea', [])
     chiiki_list = [area.get('Chiiki', '不明') for area in warn_area]
-    chiiki = ', '.join(chiiki_list) if chiiki_list else '不明'
+    chiiki = ', '.join(chiiki_list) if chiiki_list else None
     magnitude = data.get('Magunitude', '不明')
     formatted_mag = "{:.1f}".format(float(magnitude)) if magnitude != '不明' else '不明'
     max_intensity = data.get('MaxIntensity', '不明')
@@ -535,7 +535,7 @@ async def process_eew_data(data, is_test=False):
         embed.add_field(name="深さの精度", value=ac_depth, inline=True)
         embed.add_field(name="マグニチュードの精度", value=ac_magnitude, inline=True)
     if chiiki:
-        embed.add_field(name="警報区域", value=[area.get('Chiiki', '不明') for area in warn_area], inline=False)
+        embed.add_field(name="警報区域", value=chiiki, inline=False)
     embed.set_footer(text=f"気象庁 | Version {VER}")
 
     file_path = "eew/warning" if data.get('isWarn', False) else "eew/forecast"
