@@ -448,7 +448,6 @@ async def process_p2pquake_tsunami(data):
 
 # Wolfx
 async def process_eew_data(data, is_test=False):
-    print(data)
     forecast_warning = os.getenv('ForecastWarning')
     accuracy_boolean = os.getenv('AccuracyBoolean', 'False').lower() == 'true'
 
