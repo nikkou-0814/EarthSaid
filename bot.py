@@ -19,7 +19,7 @@ client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
 
 channel_id = int(os.getenv('ChannelID'))
-VER = "beta 0.1.3"
+VER = "beta 0.1.4"
 
 status_p2pquake = "接続していません"
 status_wolfx = "接続していません"
@@ -247,6 +247,7 @@ async def process_p2pquake_info(data):
                 return "不明"
 
         points_info = "\n".join([f"{point['addr']}: 震度{intensity(point['scale'])}" for point in data['points']])
+        dataname = "震度速報"
         embed = discord.Embed(title="🌍 震度速報", description=f"{formatted_time}頃、\n**最大震度{formatted_intensity}**を観測する地震が発生しました。\n**{tsunami_text}** \n今後の情報に注意してください。", color=color)
         embed.add_field(name="震度情報", value=points_info, inline=False)
 
@@ -255,7 +256,8 @@ async def process_p2pquake_info(data):
         await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, RAM, Ping計測中"))
 
     elif quaketype == "Destination":  # 震源情報
-        embed = discord.Embed(title="🌍 震源情報", description=f"{formatted_time}頃、地震がありました。\n**{tsunami_text}**", color=color)
+        dataname = "震源に関する情報"
+        embed = discord.Embed(title="🌍 震源に関する情報", description=f"{formatted_time}頃、地震がありました。\n**{tsunami_text}**", color=color)
         embed.add_field(name="震源", value=place, inline=True)
         embed.add_field(name="マグニチュード", value=f"M{formatted_mag}", inline=True)
         embed.add_field(name="深さ", value=depth, inline=True)
@@ -265,7 +267,8 @@ async def process_p2pquake_info(data):
         await client.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name=f"CPU, RAM, Ping計測中"))
 
     elif quaketype == "DetailScale":  # 地震情報
-        embed = discord.Embed(title="🌍 地震情報", description=f"{formatted_time}頃、\n{place}で**最大震度{formatted_intensity}**の地震がありました。\n**{tsunami_text}**", color=color)
+        dataname = "震源・震度に関する情報"
+        embed = discord.Embed(title="🌍 震源・震度に関する情報", description=f"{formatted_time}頃、\n{place}で**最大震度{formatted_intensity}**の地震がありました。\n**{tsunami_text}**", color=color)
         embed.add_field(name="震央", value=place, inline=True)
         embed.add_field(name="マグニチュード", value=f"M{formatted_mag}", inline=True)
         embed.add_field(name="深さ", value=depth, inline=True)
@@ -289,10 +292,12 @@ async def process_p2pquake_info(data):
         if is_eruption:
             embed.add_field(name="噴火情報", value="**大規模な噴火が発生しました**", inline=True)
             image = 'volcano.png'
+            dataname = "遠地噴火に関する情報"
         else:
             embed.add_field(name="マグニチュード", value=f"M{formatted_mag}", inline=True)
             embed.add_field(name="深さ", value=depth, inline=True)
             image = 'foreign.png'
+            dataname = "遠地地震に関する情報"
 
         if comments:
             embed.add_field(name="コメント", value=comments, inline=False)
@@ -312,7 +317,7 @@ async def process_p2pquake_info(data):
         embed.add_field(name="data", value=data, inline=True)
     
     channel = client.get_channel(channel_id)
-    embed.set_footer(text=f"{source} | Version {VER}")
+    embed.set_footer(text=f"{source}・{dataname} | Version {VER}")
 
     if quaketype != "Destination" and quaketype != "Other":
         file = discord.File(f"info/{image}", filename=image)
@@ -366,7 +371,7 @@ async def process_p2pquake_eew(data):
     if condition == '仮定震源要素':
         embed.add_field(name="仮定震源要素", value="以上の情報は仮に割り振られた情報であり、地震学的な意味を持ちません", inline=True)
     embed.add_field(name="発表地域、到達予想時刻", value=areas_text if areas_text else "発表なし", inline=False)
-    embed.set_footer(text=f"気象庁 | Version {VER}")
+    embed.set_footer(text=f"気象庁・緊急地震速報（警報）| Version {VER}")
 
     await channel.send(embed=embed)
 
@@ -437,12 +442,13 @@ async def process_p2pquake_tsunami(data):
         else:
             embed.add_field(name="対象地域", value="エリアなし", inline=False)
 
-    embed.set_footer(text=f"{source} | Version {VER}")
+    embed.set_footer(text=f"{source}・津波情報 | Version {VER}")
     channel = client.get_channel(channel_id)
     await channel.send(embed=embed)
 
 # Wolfx
 async def process_eew_data(data, is_test=False):
+    print(data)
     forecast_warning = os.getenv('ForecastWarning')
     accuracy_boolean = os.getenv('AccuracyBoolean', 'False').lower() == 'true'
 
@@ -458,8 +464,6 @@ async def process_eew_data(data, is_test=False):
     is_cancel = data.get('isCancel', False)
     is_assumption = data.get('isAssumption', False)
     warn_area = data.get('WarnArea', [])
-    chiiki_list = [area.get('Chiiki', '不明') for area in warn_area]
-    chiiki = ', '.join(chiiki_list) if chiiki_list else None
     magnitude = data.get('Magunitude', '不明')
     formatted_mag = "{:.1f}".format(float(magnitude)) if magnitude != '不明' else '不明'
     max_intensity = data.get('MaxIntensity', '不明')
@@ -470,9 +474,10 @@ async def process_eew_data(data, is_test=False):
     hypocenter = data.get('Hypocenter', '不明')
     depth = data.get('Depth', '不明')
     channel = client.get_channel(channel_id)
+    dataname = "緊急地震速報（警報）" if data.get('isWarn', False) else "緊急地震速報（地震動予報）"
 
     if is_cancel:
-        embed = discord.Embed(title='緊急地震速報 キャンセル', description='先程の緊急地震速報はキャンセルされました', color=color)
+        embed = discord.Embed(title='緊急地震速報 キャンセル', description='先程の緊急地震速報はキャンセルされました', color=0x00FF00)
         await channel.send(embed=embed)
         return
 
@@ -482,10 +487,57 @@ async def process_eew_data(data, is_test=False):
     except ValueError:
         formatted_origin_time = '不明'
 
-    title_type = "警報" if data.get('isWarn', False) else "予報"
+    title_type = "警報" if data.get('isWarn', False) else "地震動予報"
     title = f"{'**テストデータです！**' if is_test else ''}{"🚨" if data.get('isWarn', False) else "⚠️"}緊急地震速報({title_type}) 第{report_number}報"
     description = f"**{formatted_origin_time}頃{hypocenter}で地震、推定最大震度{max_intensity}**"
     color = 0xff0000 if data.get('isWarn', False) else 0xffd700
+
+    if max_intensity in ["6弱", "6強", "7"]:
+        description += "\n\n**緊急地震速報の特別警報です。身の安全を確保してください**"
+    else:
+        description += "\n\n**強い揺れに警戒してください**" if data.get('isWarn', False) else "\n\n**揺れに備えてください**"
+
+    if int(depth) >= 150:
+        description += "\n\n震源が深いため、震央から離れた場所で揺れが大きくなることがあります"
+
+    if is_assumption:
+        description += "\n\n**以下の情報は仮に割り振られた情報であり、地震学的な意味を持ちません**"
+
+    embed = discord.Embed(title=title, description=description, color=color)
+    embed.add_field(name="推定震源地", value=hypocenter, inline=True)
+    embed.add_field(name="マグニチュード", value=f"M{formatted_mag}", inline=True)
+    embed.add_field(name="深さ", value=f"{depth}km", inline=True)
+    if accuracy_boolean:
+        embed.add_field(name="震源の精度", value=ac_epicenter, inline=True)
+        embed.add_field(name="深さの精度", value=ac_depth, inline=True)
+        embed.add_field(name="Mの精度", value=ac_magnitude, inline=True)
+
+    if warn_area:
+        areas_info = []
+        for area in warn_area:
+            chiiki_name = area.get('Chiiki', '不明')
+            shindo1 = area.get('Shindo1', '不明')
+            shindo2 = area.get('Shindo2', '不明')
+            time_str = area.get('Time', '//////')
+            arrive_status = area.get('Arrive', '不明')
+
+            if time_str != '//////' and time_str != '':
+                try:
+                    arrival_time_obj = datetime.strptime(time_str, "%H%M%S")
+                    arrival_time = arrival_time_obj.strftime("%H時%M分%S秒")
+                except ValueError:
+                    arrival_time = '不明'
+            else:
+                arrival_time = '不明'
+
+            area_info = f"地域: {chiiki_name}\n予想震度: {shindo1}\n到達時間: {arrival_time}\n状況: {arrive_status}"
+            areas_info.append(area_info)
+        areas_text = "\n\n".join(areas_info)
+        embed.add_field(name="各地域の予想震度・到達時間 (気象庁発表)", value=areas_text, inline=False)
+    else:
+        chiiki = None
+
+    embed.set_footer(text=f"気象庁・{dataname}| Version {VER}")
 
     if max_intensity == '1':
         image = 'shindo1.png'
@@ -509,34 +561,6 @@ async def process_eew_data(data, is_test=False):
         image = 'deep.png'
     else:
         image = 'unknown.png'
-    
-    if is_final:
-        title += "【最終報】"
-    if is_assumption:
-        title += "【仮定震源】"
-
-    if max_intensity in ["6弱", "6強", "7"]:
-        description += "\n\n**緊急地震速報の特別警報です。身の安全を確保してください**"
-    else:
-        description += "\n\n**強い揺れに警戒してください**" if data.get('isWarn', False) else "\n\n**揺れに備えてください**"
-
-    if int(depth) >= 150:
-        description += "\n\n震源が深いため、震央から離れた場所で揺れが大きくなることがあります"
-
-    if is_assumption:
-        description += "\n\n**以下の情報は仮に割り振られた情報であり、地震学的な意味を持ちません**"
-
-    embed = discord.Embed(title=title, description=description, color=color)
-    embed.add_field(name="推定震源地", value=hypocenter, inline=True)
-    embed.add_field(name="マグニチュード", value=f"M{formatted_mag}", inline=True)
-    embed.add_field(name="深さ", value=f"{depth}km", inline=True)
-    if accuracy_boolean:
-        embed.add_field(name="震源の精度", value=ac_epicenter, inline=True)
-        embed.add_field(name="深さの精度", value=ac_depth, inline=True)
-        embed.add_field(name="マグニチュードの精度", value=ac_magnitude, inline=True)
-    if chiiki:
-        embed.add_field(name="警報区域", value=chiiki, inline=False)
-    embed.set_footer(text=f"気象庁 | Version {VER}")
 
     file_path = "eew/warning" if data.get('isWarn', False) else "eew/forecast"
     file = discord.File(f"{file_path}/{image}", filename=image)
@@ -579,7 +603,7 @@ async def status(interaction: discord.Interaction):
     embed_1.add_field(name="CPU使用率", value=f"{psutil.cpu_percent()}%", inline=True)
     embed_1.add_field(name="メモリ使用量", value=f"{psutil.virtual_memory().percent}%", inline=True)
     embed_1.add_field(name="Ping", value=f"{round(client.latency * 1000)}ms", inline=True)
-    embed_1.add_field(name="P2PQuake(地震情報)", value=status_p2pquake, inline=True)
+    embed_1.add_field(name="P2PQuake(地震津波情報)", value=status_p2pquake, inline=True)
     embed_1.add_field(name="Wolfx(緊急地震速報)", value=status_wolfx, inline=True)
     embed_1.set_footer(text=f"1/2")
 
