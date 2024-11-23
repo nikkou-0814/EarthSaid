@@ -77,30 +77,35 @@ async def run_speedtest():
 # WebSocket connection
 async def websocket_listener(url, process_function, status_variable_name):
     retry_count = 0
-    while True:
-        try:
-            session = aiohttp.ClientSession()
-            async with session.ws_connect(url) as ws:
-                globals()[status_variable_name] = "接続しています"
-                print(f"{url}へ接続しました。")
-                retry_count = 0
-                async for msg in ws:
-                    if msg.type == aiohttp.WSMsgType.TEXT:
-                        data = json.loads(msg.data)
-                        await process_function(data)
-        except aiohttp.ClientError as e:
-            print(f"{url}: WebSocket接続エラー: {e}")
-            globals()[status_variable_name] = "接続エラー"
-        except Exception as e:
-            print(f"{url}: エラーが発生しました: {e}")
-            traceback.print_exc()
-            globals()[status_variable_name] = "接続エラー"
-        finally:
-            await session.close()
-            retry_count += 1
-            print(f"{url}: 5秒後に再接続を試みます... (試行回数: {retry_count})")
-            globals()[status_variable_name] = "再接続中"
-            await asyncio.sleep(5)
+    async with aiohttp.ClientSession() as session:
+        while True:
+            try:
+                async with session.ws_connect(url) as ws:
+                    globals()[status_variable_name] = "接続しています"
+                    print(f"{url}へ接続しました。")
+                    retry_count = 0
+                    async for msg in ws:
+                        if msg.type == aiohttp.WSMsgType.TEXT:
+                            data = json.loads(msg.data)
+                            await process_function(data)
+                        elif msg.type == aiohttp.WSMsgType.CLOSED:
+                            print(f"{url}: サーバーによって接続が閉じられました。再接続します。")
+                            break
+                        elif msg.type == aiohttp.WSMsgType.ERROR:
+                            print(f"{url}: WebSocketエラーが発生しました。再接続します。")
+                            break
+            except aiohttp.ClientError as e:
+                print(f"{url}: WebSocket接続エラー: {e}")
+            except ConnectionResetError:
+                print(f"{url}: 接続がリセットされました。再接続します。")
+            except Exception as e:
+                print(f"{url}: 予期しないエラーが発生しました: {e}")
+                traceback.print_exc()
+            finally:
+                retry_count += 1
+                globals()[status_variable_name] = "再接続中"
+                print(f"{url}: 5秒後に再接続を試みます... (試行回数: {retry_count})")
+                await asyncio.sleep(5)
 
 async def process_p2pquake_message(data):
     if data['code'] == 551:
