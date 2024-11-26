@@ -188,43 +188,43 @@ async def process_p2pquake_info(data):
     )
 
     if max_intensity >= 70:
-        color = 0x9e00ff
+        color = 0x9D00DE
         image = 'shindo7.png'
         formatted_intensity = '7'
     elif max_intensity >= 60:
-        color = 0xff0000
+        color = 0xFE3B3B
         image = 'shindo6s.png'
         formatted_intensity = '6強'
     elif max_intensity >= 55:
-        color = 0xe52020
+        color = 0xFD6767
         image = 'shindo6w.png'
         formatted_intensity = '6弱'
     elif max_intensity >= 50:
-        color = 0xe58a20
+        color = 0xC0392B
         image = 'shindo5s.png'
         formatted_intensity = '5強'
     elif max_intensity >= 45:
-        color = 0xe3a631
+        color = 0xE74C3C
         image = 'shindo5w.png'
         formatted_intensity = '5弱'
     elif max_intensity >= 40:
-        color = 0xe6d53c
+        color = 0xE67E22
         image = 'shindo4.png'
         formatted_intensity = '4'
     elif max_intensity >= 30:
-        color = 0x41ab45
+        color = 0xF1C40F
         image = 'shindo3.png'
         formatted_intensity = '3'
     elif max_intensity >= 20:
-        color = 0x4178ab
+        color = 0x2ECC71
         image = 'shindo2.png'
         formatted_intensity = '2'
     elif max_intensity >= 10:
-        color = 0x515b63
+        color = 0x3498DB
         image = 'shindo1.png'
         formatted_intensity = '1'
     else:
-        color = 0x515b63
+        color = 0x95A5A6
         image = 'unknown.png'
         formatted_intensity = '不明'
 
