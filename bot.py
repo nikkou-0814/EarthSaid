@@ -481,7 +481,7 @@ async def process_eew_data(data, is_test=False):
     dataname = "緊急地震速報（警報）" if data.get('isWarn', False) else "緊急地震速報（地震動予報）"
 
     if is_cancel:
-        embed = discord.Embed(title='緊急地震速報 キャンセル', description='先程の緊急地震速報はキャンセルされました', color=0x00FF00)
+        embed = discord.Embed(title='緊急地震速報【キャンセル】', description='先程の緊急地震速報はキャンセルされました', color=0x00FF00)
         await channel.send(embed=embed)
         return
 
@@ -492,7 +492,7 @@ async def process_eew_data(data, is_test=False):
         formatted_origin_time = '不明'
 
     title_type = "警報" if data.get('isWarn', False) else "地震動予報"
-    title = f"{'**テストデータです！**' if is_test else ''}{"🚨" if data.get('isWarn', False) else "⚠️"}緊急地震速報({title_type}) 第{report_number}報"
+    title = f"{'**テストデータです！**' if is_test else ''}{"🚨" if data.get('isWarn', False) else "⚠️"}緊急地震速報({title_type}) 第{report_number}報{'【最終報】' if is_final else ''}"
     description = f"**{formatted_origin_time}頃{hypocenter}で地震、推定最大震度{max_intensity}**"
     color = 0xff0000 if data.get('isWarn', False) else 0xffd700
 
