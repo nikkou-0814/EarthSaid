@@ -19,7 +19,7 @@ client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
 
 channel_id = int(os.getenv('ChannelID'))
-VER = "beta 0.1.4"
+VER = "beta 0.1.5"
 
 status_p2pquake = "接続していません"
 status_wolfx = "接続していません"
@@ -478,7 +478,7 @@ async def process_eew_data(data, is_test=False):
     hypocenter = data.get('Hypocenter', '不明')
     depth = data.get('Depth', '不明')
     channel = client.get_channel(channel_id)
-    dataname = "緊急地震速報（警報）" if data.get('isWarn', False) else "緊急地震速報（地震動予報）"
+    dataname = "緊急地震速報（警報）" if data.get('isWarn', False) else "緊急地震速報（予報）"
 
     if is_cancel:
         embed = discord.Embed(title='緊急地震速報【キャンセル】', description='先程の緊急地震速報はキャンセルされました', color=0x00FF00)
